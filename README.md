@@ -8,7 +8,7 @@
 ## Project Overview
 This project extends my completed [Windows Server 2025 Enterprise-Style Infrastructure Lab](https://github.com/simonbaron-it/HomeLab-EnterpriseEnvironment) into Microsoft Azure. The existing environment provides on-premises Active Directory, DNS, DHCP, routing, file services, centralised administration, monitoring, and PowerShell automation.
 
-The next step is to introduce cloud infrastructure and hybrid management while preserving the existing on-premises lab. Emphasis is on the practical work performed by Infrastructure & Cloud Engineers: deploying resources, integrating identity, managing Windows servers, monitoring health, applying updates, recovering data, automating repeatable tasks, and troubleshooting failures.
+The project introduces Azure infrastructure and hybrid management while retaining the existing on-premises environment. It focuses on practical infrastructure engineering responsibilities, including deployment, administration, identity integration, monitoring, maintenance, automation and troubleshooting.
 
 ### Project objectives
 - Deploy and securely administer Azure networking and a Windows Server VM.
@@ -38,16 +38,16 @@ The build will be documented as a series of practical engineering guides, listed
 
 |Area|Documentation|
 |---|---|
-|Azure foundation||
-|Hybrid identity||
-|Azure Arc||
-|Monitoring||
-|File Services||
-|Patching and recovery||
-|Automation||
-|Testing||
+|Azure foundation|`Coming Soon`|
+|Hybrid identity|`Coming Soon`|
+|Azure Arc|`Coming Soon`|
+|Monitoring|`Coming Soon`|
+|File Services|`Coming Soon`|
+|Patching and recovery|`Coming Soon`|
+|Automation|`Coming Soon`|
+|Testing|`Coming Soon`|
 
-## Skills Demonstrated
+## Technical Skills Being Developed
 - <b>Azure Infrastructure Administration:</b> Deploy, configure and secure Azure Virtual Machines, Virtual Networks, Network Security Groups, RBAC and cloud resources.
 - <b>Hybrid Identity & Server Management:</b>  Integrate on-premises Active Directory with Microsoft Entra ID using Cloud Sync, and manage Windows servers through Azure Arc.
 - <b>Monitoring & Troubleshooting:</b>  Implement Azure Monitor, Log Analytics, KQL queries and alerting to monitor infrastructure, investigate failures and resolve operational issues.
