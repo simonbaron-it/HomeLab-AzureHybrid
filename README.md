@@ -24,14 +24,14 @@ The next step is to introduce cloud infrastructure and hybrid management while p
 
 |Phase|Engineering Focus|Status|
 |---|---|---|
-|01|Azure foundation: resource governance, networking, NSGs, VM deployment and secure administration|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
-|02|Hybrid identity: Entra Cloud Sync, pilot users/groups, password sync and troubleshooting|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
-|03|Hybrid management: onboard FS01 and MGMT01 to Azure Arc|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
-|04|Monitoring: Log Analytics, Data Collection Rules, KQL and alert testing|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
-|05|Hybrid storage: Azure Files, File Sync and synchronisation diagnostics|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
-|06|Operations: Update Manager, Azure VM backup and file-level recovery|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
-|07|Automation: Azure PowerShell, Bicep and hybrid health checks|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
-|08|Validation: simulated incidents, runbooks, final testing and documentation|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|01 - Azure Foundation|Resource governance, networking, NSGs, VM deployment and secure administration|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
+|02 - Hybrid Identity|Entra Cloud Sync, pilot users/groups, password sync and troubleshooting|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|03 - Hybrid Management|Onboard `FS01` and `MGMT01` to Azure Arc|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|04 - Monitoring|Log Analytics, Data Collection Rules, KQL and alert testing|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|05 - Hybrid Storage|Azure Files, File Sync and synchronisation diagnostics|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|06 - Operations|Update Manager, Azure VM backup and file-level recovery|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|07 - Automation|Azure PowerShell, Bicep and hybrid health checks|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|08 - Validation|Simulated incidents, runbooks, final testing and documentation|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
 
 ## Technical Documentation
 The build will be documented as a series of practical engineering guides, listed below. Screenshots and command output will be included where they provide useful evidence.
