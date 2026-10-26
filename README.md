@@ -1,6 +1,6 @@
 # Hybrid Azure Infrastructure Lab
 
-`Azure administration` · `Windows Server` · `Hybrid Active Directory/Entra ID` · `Azure Arc` · `Azure Monitor` · `Azure Files` · `Patching & Backup` · `PowerShell` · `Bicep` · `Infrastructure Troubleshooting`
+`Azure Administration` · `Windows Server` · `Hybrid Active Directory/Entra ID` · `Azure Arc` · `Azure Monitor` · `Azure Files` · `Patching & Backup` · `PowerShell` · `Bicep` · `Infrastructure Troubleshooting`
 
 > <b>Extending an existing Windows Server 2025 lab into Microsoft Azure</b>   
 > A hands-on infrastructure engineering project focused on hybrid identity, Azure administration, server management, monitoring, storage, recovery, and automation.
