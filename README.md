@@ -1,4 +1,4 @@
-# Hybrid Azure Infrastructure Home Lab
+# Hybrid Azure Infrastructure Lab
 
 `Azure administration` · `Windows Server` · `Hybrid Active Directory/Entra ID` · `Azure Arc` · `Azure Monitor` · `Azure Files` · `Patching & Backup` · `PowerShell` · `Bicep` · `Infrastructure Troubleshooting`
 
