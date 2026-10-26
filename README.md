@@ -1,2 +1,57 @@
-# HomeLab-AzureHybrid
-Hands-on Azure hybrid infrastructure lab extending an existing Windows Server 2025 environment with Microsoft Entra ID, Azure Arc, monitoring, storage, automation and operational troubleshooting.
+# Hybrid Azure Infrastructure Home Lab
+
+`Azure administration` · `Windows Server` · `Hybrid Active Directory/Entra ID` · `Azure Arc` · `Azure Monitor` · `Azure Files` · `Patching & Backup` · `PowerShell` · `Bicep` · `Infrastructure Troubleshooting`
+
+> <b>Extending an existing Windows Server 2025 home lab into Microsoft Azure</b>   
+> A hands-on infrastructure engineering project focused on hybrid identity, Azure administration, server management, monitoring, storage, recovery, and automation.
+
+## Project Overview
+This project extends my completed [Windows Server 2025 Enterprise-Style Infrastructure Lab](https://github.com/simonbaron-it/HomeLab-EnterpriseEnvironment) into Microsoft Azure. The existing environment provides on-premises Active Directory, DNS, DHCP, routing, file services, centralised administration, monitoring, and PowerShell automation.
+
+The next step is to introduce cloud infrastructure and hybrid management while preserving the existing on-premises lab. Emphasis is on the practical work performed by Infrastructure & Cloud Engineers: deploying resources, integrating identity, managing Windows servers, monitoring health, applying updates, recovering data, automating repeatable tasks, and troubleshooting failures.
+
+### Project objectives
+- Deploy and securely administer Azure networking and a Windows Server VM.
+- Synchronise selected on-premises Active Directory identities to Microsoft Entra ID.
+- Manage existing Windows servers using Azure Arc.
+- Collect operational logs, query telemetry, and configure alerts with Azure Monitor.
+- Extend a test file share from the on-prem file server into Azure using Azure File Sync.
+- Test patching, Azure VM backup, and recovery processes.
+- Automate Azure deployment and administration using PowerShell and Bicep.
+- Record incident investigations, root causes, remediation steps, and validation results.
+
+## Implementation Roadmap
+
+|Phase|Engineering Focus|Status|
+|---|---|---|
+|01|Azure foundation: resource governance, networking, NSGs, VM deployment and secure administration|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
+|02|Hybrid identity: Entra Cloud Sync, pilot users/groups, password sync and troubleshooting|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|03|Hybrid management: onboard FS01 and MGMT01 to Azure Arc|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|04|Monitoring: Log Analytics, Data Collection Rules, KQL and alert testing|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|05|Hybrid storage: Azure Files, File Sync and synchronisation diagnostics|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|06|Operations: Update Manager, Azure VM backup and file-level recovery|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|07|Automation: Azure PowerShell, Bicep and hybrid health checks|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|08|Validation: simulated incidents, runbooks, final testing and documentation|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+
+## Technical Documentation
+The build will be documented as a series of practical engineering guides, listed below. Screenshots and command output will be included where they provide useful evidence.
+
+|Area|Documentation|
+|---|---|
+|Azure foundation||
+|Hybrid identity||
+|Azure Arc||
+|Monitoring||
+|File Services||
+|Patching and recovery||
+|Automation||
+|Testing||
+
+## Skills Demonstrated
+- <b>Azure Infrastructure Administration:</b> Deploy, configure and secure Azure Virtual Machines, Virtual Networks, Network Security Groups, RBAC and cloud resources.
+- <b>Hybrid Identity & Server Management:</b>  Integrate on-premises Active Directory with Microsoft Entra ID using Cloud Sync, and manage Windows servers through Azure Arc.
+- <b>Monitoring & Troubleshooting:</b>  Implement Azure Monitor, Log Analytics, KQL queries and alerting to monitor infrastructure, investigate failures and resolve operational issues.
+- <b>Hybrid Storage, Backup & Recovery:</b>  Configure Azure Files and File Sync, manage server patching through Azure Update Manager, and validate backup and recovery procedures.
+- <b>PowerShell & Infrastructure as Code:</b>  Automate infrastructure administration, health checks and reporting using PowerShell, and deploy Azure resources using Bicep.
+- <b>Infrastructure Security & Governance:</b>  Apply least-privilege access, network security controls, resource governance and Azure cost management practices.
+- <b>Technical Documentation & Operations:</b>  Produce architecture diagrams, implementation guides, operational runbooks and incident reports documenting configuration, testing and root-cause analysis.
