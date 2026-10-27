@@ -38,14 +38,14 @@ The build will be documented as a series of practical engineering guides, listed
 
 |Area|Documentation|
 |---|---|
-|Azure foundation|`Coming Soon`|
-|Hybrid identity|`Coming Soon`|
-|Azure Arc|`Coming Soon`|
-|Monitoring|`Coming Soon`|
-|File Services|`Coming Soon`|
-|Patching and recovery|`Coming Soon`|
-|Automation|`Coming Soon`|
-|Testing|`Coming Soon`|
+|Azure foundation|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Hybrid identity|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Azure Arc|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Monitoring|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|File Services|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Patching and recovery|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Automation|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Testing|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 
 ## Technical Skills Being Developed
 - <b>Azure Infrastructure Administration:</b> Deploy, configure and secure Azure Virtual Machines, Virtual Networks, Network Security Groups, RBAC and cloud resources.
