@@ -38,12 +38,12 @@ The build will be documented as a series of practical engineering guides, listed
 
 |Area|Documentation|
 |---|---|
-|Azure foundation|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
-|Hybrid identity|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Azure Foundation|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Hybrid Identity|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Azure Arc|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Monitoring|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |File Services|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
-|Patching and recovery|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Patching and Recovery|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Automation|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Testing|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 
