@@ -37,11 +37,64 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 
 > The design places an Azure VM in a dedicated Azure workload subnet protected by a subnet-level NSG. Azure Bastion Developer provides browser-based administration. At this stage, there is no private connection to the on-premises lab, and Azure-provided DNS is used.
 
-<i>Insert architecture diagram</i>
+<img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/main/Images/Azure%20Architecture%20Diagram.png" width="700"/>
 
 ## Azure Environment and Configuration
 
-## Implementation
+### Azure Tenant and Subscription
+
+|Component|Configuration|
+|---|---|
+|Azure Region|`UK South`|
+|Azure Tenant|`Baron Hybrid Home Lab`|
+|Subscription|`Azure Plan`(30 day trial)|
+|Administrative Access|Microsoft Entra account secured with MFA|
+|Budget Alerts|`50%: £10`, `80%: £16`, `100%: £20`|
+
+<img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/5a8f3b3f817562857bd44cbddc7e07160529b70c/Images/Azure%20Subscription.png" width="1000"/>
+
+### Resource Group
+The Resource Group `rg-hybridlab-uks-01` was created in the `UK South` region to contain the Phase 1 infrastructure.
+
+To organise deployment, I used a consistent resource naming convention and project tags:    
+`Project:HybridInfrastructureLab`, `Environment:Lab`, `Owner:PersonalLab`, `ManagedBy:Manual`, `CostCentre:Learning`
+
+<img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/main/Images/Resource%20Group.png" width="1000"/>
+
+### Virtual Network and Workload Subnet
+A dedicated VNet was created for the Azure-Hosted worload. The address space was kept separate from the on-premise home lab to support future private connectivity without needing to readdress the existing servers.
+
+|Component|Configuration|
+|---|---|
+|Resource Group|`rg-hybridlab-uks-01`|
+|Virtual Network|`vnet-hybridlab-uks-01`|
+|Region|`UK South`|
+|Address Space|`10.30.0.0/16`|
+|Workload Subnet|`snet-workloads-01`|
+|Subnet Prefix|`10.30.1.0/24`|
+|DNS|Azure-provided DNS during Phase 1|
+
+<img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/main/Images/Virtual%20Network.png" width="1000"/>
+
+<img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/main/Images/VNet%20Subnet.png" width="800"/>
+
+> Azure-provided DNS was retained because the lab did not yet have a route to the on-premises domain controllers.
+>
+> I did not introduce a VPN Gateway, Azure Firewall or complex hub-and-spoke design. Those were unnecessary for the Phase 1 objectives and would have increased cost and scope.
+
+### Network Security Group Configuration
+A Network Security Group was deployed and associated with the workload subnet. Inbound and outbound rues were reviewed to understand how Azure evaluates network access at the subnet boundary.
+
+|Control|Approach|
+|---|---|
+|NSG|`nsg-workloads-uks-01`|
+|Scope|`snet-workload-01`|
+|Public Inbound RDP|Not allowed|
+|Intra-VNet Traffic|Governed by applicable NSG rules|
+
+<img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/main/Images/Network%20Security%20Group.png" width="1000"/>
+
+### Windows Server 2025 VM deployment
 
 ## Validation
 
