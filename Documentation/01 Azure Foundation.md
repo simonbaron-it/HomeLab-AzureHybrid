@@ -47,7 +47,7 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 |---|---|
 |Azure Region|`UK South`|
 |Tenant Display Name|`Baron Hybrid Home Lab`|
-|Subscription|`Azure Plan`(30-day free account trial)|
+|Subscription|`Azure Plan` (30-day free account trial)|
 |Administrative Access|Microsoft Entra account secured with MFA|
 |Budget Alerts|`50%: £10`, `80%: £16`, `100%: £20`|
 
