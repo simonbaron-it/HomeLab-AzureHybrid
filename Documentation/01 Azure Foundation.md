@@ -1,9 +1,9 @@
 # Azure Foundation
-> This documentation establishes the Azure foundation for my hybrid infrastructure lab. It brings together Azure networking, a Windows Server virtual machine, secure administration, cost management and operational troubleshooting. The environment will support later phases of the project.
+> This documentation establishes the Azure foundation for a hybrid infrastructure lab, covering virtual networking, Windows Server deployment, secure administration and cost management. The environment is designed to support future integration with existing on-premises infrastructure.
 
 ## Scenario and Objectives
 ### Business Scenario
-A simulated organisation operates on-premise Active Directory, DNS, DHCP, file services and management tooling. It wants to introduce Azure while retaining its existing environment.
+A simulated organisation operates on-premises Active Directory, DNS, DHCP, file services and management tooling. It wants to introduce Azure while retaining its existing environment.
 
 The objective is to establish a small, controlled Azure deployment that could later support hybrid identity, management, monitoring, storage and automation. Rather than moving production-style services into Azure immediately, the underlying infrastructure will be built and tested first.
 
@@ -18,7 +18,7 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 
 > The existing on-premises environment remained separate throughout this phase. No site-to-site VPN, Azure-hosted domain controller, AD domain join, Microsoft Entra Cloud Sync, Azure Arc or centralised monitoring integration was implemented as part of the initial implementation.
 
-## Existing On-Premise Environment
+## Existing On-Premises Environment
 
 |System|Existing Function|Address/Network|
 |---|---|---|
@@ -41,28 +41,31 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 
 ## Azure Environment and Configuration
 
-### Azure Tenant and Subscription
+### Tenant, Subscription and Cost Management
 
 |Component|Configuration|
 |---|---|
 |Azure Region|`UK South`|
-|Azure Tenant|`Baron Hybrid Home Lab`|
-|Subscription|`Azure Plan`(30 day trial)|
+|Tenant Display Name|`Baron Hybrid Home Lab`|
+|Subscription|`Azure Plan`(30-day free account trial)|
 |Administrative Access|Microsoft Entra account secured with MFA|
 |Budget Alerts|`50%: £10`, `80%: £16`, `100%: £20`|
+
+#### Budget Alerts
+<i>Explain budget alert setup</i>
 
 <img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/5a8f3b3f817562857bd44cbddc7e07160529b70c/Images/Azure%20Subscription.png" width="1000"/>
 
 ### Resource Group
-The Resource Group `rg-hybridlab-uks-01` was created in the `UK South` region to contain the Phase 1 infrastructure.
+The resource group `rg-hybridlab-uks-01` was created in the `UK South` region to contain the Phase 1 infrastructure.
 
-To organise deployment, I used a consistent resource naming convention and project tags:    
+To organise deployment, I used a consistent resource naming convention and project tags to be applied to all resources:    
 `Project:HybridInfrastructureLab`, `Environment:Lab`, `Owner:PersonalLab`, `ManagedBy:Manual`, `CostCentre:Learning`
 
 <img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/main/Images/Resource%20Group.png" width="1000"/>
 
-### Virtual Network and Workload Subnet
-A dedicated VNet was created for the Azure-Hosted worload. The address space was kept separate from the on-premise home lab to support future private connectivity without needing to readdress the existing servers.
+### Virtual Network and Subnet
+A dedicated VNet was created for the Azure-hosted workload. The address space was kept separate from the on-premises home lab to support future private connectivity without needing to readdress the existing servers.
 
 |Component|Configuration|
 |---|---|
@@ -83,19 +86,25 @@ A dedicated VNet was created for the Azure-Hosted worload. The address space was
 > I did not introduce a VPN Gateway, Azure Firewall or complex hub-and-spoke design. Those were unnecessary for the Phase 1 objectives and would have increased cost and scope.
 
 ### Network Security Group Configuration
-A Network Security Group was deployed and associated with the workload subnet. Inbound and outbound rues were reviewed to understand how Azure evaluates network access at the subnet boundary.
+A Network Security Group was deployed and associated with the workload subnet. Azure's default inbound and outbound rules were reviewed to understand how Azure evaluates network access at the subnet boundary.
 
 |Control|Approach|
 |---|---|
 |NSG|`nsg-workloads-uks-01`|
-|Scope|`snet-workload-01`|
+|Scope|`snet-workloads-01`|
 |Public Inbound RDP|Not allowed|
 |Intra-VNet Traffic|Governed by applicable NSG rules|
 
 <img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/main/Images/Network%20Security%20Group.png" width="1000"/>
 
-### Windows Server 2025 VM deployment
+### Windows Server 2025 VM Deployment
 
-## Validation
+### Azure Bastion Developer
 
-## Troubleshooting?
+### VM Storage and Lifecycle Management
+
+## Validation and Testing
+
+## Troubleshooting
+
+## Lessons and Next Steps
