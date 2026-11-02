@@ -22,7 +22,7 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 
 |System|Existing Function|Address/Network|
 |---|---|---|
-|`RTR01`|RRAS routing, NAT and DHCP relay|`10.10.10.1`/`10.10.20.1`/`172.16.0.2`|
+|`RTR01`|RRAS routing, NAT and DHCP relay|`10.10.10.1`, `10.10.20.1`, `172.16.0.2`|
 |`DC01`|Active Directory, DNS and DHCP|`10.10.10.10`|
 |`DC02`|Secondary domain controller, DNS and DHCP|`10.10.10.11`|
 |`FS01`|Windows file services|`10.10.10.20`|
