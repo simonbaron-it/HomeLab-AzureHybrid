@@ -49,10 +49,9 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 |Tenant Display Name|`Baron Hybrid Home Lab`|
 |Subscription|`Azure Plan` (30-day free account trial)|
 |Administrative Access|Microsoft Entra account secured with MFA|
-|Budget Alerts|`50%: £10`, `80%: £16`, `100%: £20`|
 
 #### Budget Alerts
-<i>Explain budget alert setup</i>
+A £20 monthly budget was configured in Azure Cost Management, with email notification thresholds set at `50%: £10`, `80%: £16` and `100%: £20`. These alerts provide early warning of increasing Azure costs during deployment and testing, helping to identify unexpected expenditure.
 
 <img src="../Images/Azure%20Subscription.png" width="1000"/>
 
