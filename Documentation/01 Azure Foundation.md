@@ -59,7 +59,7 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 ### Resource Group
 The resource group `rg-hybridlab-uks-01` was created in the `UK South` region to contain the Phase 1 infrastructure.
 
-To organise deployment, I used a consistent resource naming convention and project tags to be applied to all resources:    
+To organise the deployment, I adopted a consistent resource naming convention and defined the following tags for application across Azure resources:    
 `Project:HybridInfrastructureLab`, `Environment:Lab`, `Owner:PersonalLab`, `ManagedBy:Manual`, `CostCentre:Learning`
 
 <img src="https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/main/Images/Resource%20Group.png" width="1000"/>
@@ -86,7 +86,7 @@ A dedicated VNet was created for the Azure-hosted workload. The address space wa
 > I did not introduce a VPN Gateway, Azure Firewall or complex hub-and-spoke design. Those were unnecessary for the Phase 1 objectives and would have increased cost and scope.
 
 ### Network Security Group Configuration
-A Network Security Group was deployed and associated with the workload subnet. Azure's default inbound and outbound rules were reviewed to understand how Azure evaluates network access at the subnet boundary.
+A Network Security Group was deployed and associated with the `snet-workloads-01` subnet. It retained Azure's default security rules, permitting traffic within the Virtual Network while denying unmatched inbound traffic from the internet. No custom rule was introduced to expose RDP publicly.
 
 |Control|Approach|
 |---|---|
