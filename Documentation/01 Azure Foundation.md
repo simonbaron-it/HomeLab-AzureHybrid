@@ -106,7 +106,7 @@ A Network Security Group was deployed and associated with the `snet-workloads-01
 <img src="../Images/Network%20Security%20Group.png" width="1000"/>
 
 ### Windows Server 2025 VM Deployment
-A Virtual Machine `AZ-LAB01` was provisioned, using a `Standard_B2s_V2` sized `Windows Server 2025 Datacenter Gen 2` image. I linked the network interface to the existing VNet and subnet, configured a managed OS disk, and reviewed the security and management settings during deployment.
+The Virtual Machine `AZ-LAB01` was deployed using the `Windows Server 2025 Datacenter Gen 2` image and the `Standard_B2s_v2` VM size. I connected its network interface to the existing VNet and workload subnet, configured a managed OS disk, and reviewed the security and management settings during deployment.
 
 |VM Component|Configuration|
 |---|---|
@@ -125,7 +125,7 @@ A Virtual Machine `AZ-LAB01` was provisioned, using a `Standard_B2s_V2` sized `W
 ### Azure Bastion Developer
 Azure Bastion Developer was used to provide browser-based RDP administration of `AZ-LAB01` through the Azure portal, without requiring a public IP address on the virtual machine or exposing RDP directly to the internet.
 
-The Developer tier was selected because it provides free connectivity for development and testing environments using shared infrastructure. Unlike the paid Bastion tiers, it does not require a dedicated `AzureBastionSubnet` or public IP resource.
+The Developer tier was selected because it provides free connectivity for development and testing environments using shared infrastructure, without requiring a dedicated `AzureBastionSubnet` or public IP resource.
 
 An RDP session was established through the Azure portal using the VM's administrator credentials, confirming that the server could be accessed through Bastion using its private IP address (`10.30.1.4`).
 
