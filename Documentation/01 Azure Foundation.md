@@ -45,18 +45,22 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 
 |Component|Configuration|
 |---|---|
-|Azure Region|`UK South`|
+|Azure Region|`Sweden Central`|
 |Tenant Display Name|`Baron Hybrid Home Lab`|
 |Subscription|`Azure Plan` (30-day free account trial)|
 |Administrative Access|Microsoft Entra account secured with MFA|
 
-#### Budget Alerts
-A £20 monthly budget was configured in Azure Cost Management, with email notification thresholds set at `50%: £10`, `80%: £16` and `100%: £20`. These alerts provide early warning of increasing Azure costs during deployment and testing, helping to identify unexpected expenditure.
+> **Azure Region Decision:** My initial plan was to deploy the lab environment in my closest region - `UK South`, however, there were no appropriate VM disk sizes available to deploy in this region, nor in `UK West`. The disk sizes necessary were available in regions `West Europe` and `North Europe`, however I was unable to deploy resources in these regions due to subscription restrictions. The `Sweden Central` Azure region not only allowed me to deploy resources with my current subscription, but also had the required VM disk sizes available - hence my decision to deploy my lab environment in this region.
 
 <img src="../Images/Azure%20Subscription.png" width="1000"/>
 
+#### Budget Alerts
+A £20 monthly budget was configured in Azure Cost Management, with email notification thresholds set at `50%: £10`, `80%: £16` and `100%: £20`. These alerts provide early warning of increasing Azure costs during deployment and testing, helping to identify unexpected expenditure.
+
+<img src="" width="1000"/>
+
 ### Resource Group
-The resource group `rg-hybridlab-uks-01` was created in the `UK South` region to contain the Phase 1 infrastructure.
+The resource group `rg-hybridlab-swc-01` was created in the `Sweden Central` region to contain the Phase 1 infrastructure.
 
 To organise the deployment, I adopted a consistent resource naming convention and defined the following tags for application across Azure resources:    
 `Project:HybridInfrastructureLab`, `Environment:Lab`, `Owner:PersonalLab`, `ManagedBy:Manual`, `CostCentre:Learning`
@@ -68,9 +72,9 @@ A dedicated VNet was created for the Azure-hosted workload. The address space wa
 
 |Component|Configuration|
 |---|---|
-|Resource Group|`rg-hybridlab-uks-01`|
-|Virtual Network|`vnet-hybridlab-uks-01`|
-|Region|`UK South`|
+|Resource Group|`rg-hybridlab-swc-01`|
+|Virtual Network|`vnet-hybridlab-swc-01`|
+|Region|`Sweden Central`|
 |Address Space|`10.30.0.0/16`|
 |Workload Subnet|`snet-workloads-01`|
 |Subnet Prefix|`10.30.1.0/24`|
@@ -89,7 +93,7 @@ A Network Security Group was deployed and associated with the `snet-workloads-01
 
 |Control|Approach|
 |---|---|
-|NSG|`nsg-workloads-uks-01`|
+|NSG|`nsg-workloads-swc-01`|
 |Scope|`snet-workloads-01`|
 |Public Inbound RDP|Not allowed|
 |Intra-VNet Traffic|Governed by applicable NSG rules|
@@ -97,8 +101,19 @@ A Network Security Group was deployed and associated with the `snet-workloads-01
 <img src="../Images/Network%20Security%20Group.png" width="1000"/>
 
 ### Windows Server 2025 VM Deployment
+A Virtual Machine `AZ-LAB01` was provisioned, using a `Standard B2s V2` sized `Windows Server 2025 Datacenter Gen 2` image. I linked the network interface to the existing VNet and subnet, selected managed storage, and reviewed the security and management settings during deployment.
 
-### Azure Bastion Developer
+|VM Component|Configuration|
+|---|---|
+|Name|`AZ-LAB01`|
+|Region|`Sweden Central`|
+|Operating System|`Windows Server 2025 Datacenter Gen 2`|
+|VM Size|`Standard B2s v2` (2vCPUs, 8GB memory)|
+|Private IP|`10.30.1.4`|
+|Public IP|`None`|
+|OS Disk|`Standard SSD LRS` (127GB)|
+|Boot Security|`Trusted Launch`, `Secure Boot` & `vTPM` enabled|
+|Administration|`Bastion Developer`|
 
 ### VM Storage and Lifecycle Management
 
