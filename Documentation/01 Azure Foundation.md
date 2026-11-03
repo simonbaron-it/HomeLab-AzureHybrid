@@ -38,11 +38,11 @@ The design places an Azure VM in a dedicated Azure workload subnet protected by 
 
 <img src="../Images/Azure%20Architecture%20Diagram.png" width="700"/>
 
-> **Azure Region Decision:** My initial plan was to deploy the lab environment in `UK South`, however, there were no appropriate VM disk sizes available to deploy in this region, nor in `UK West`.
+> **Azure Region Decision:** The initial deployment plan targeted the `UK South` region, however the required VM size was unavailable to my Azure subscription in both `UK South` and `UK West`.
 >
-> The disk sizes necessary were available in regions `West Europe` and `North Europe`, however I was denied access to deploy resources in these regions due to Azure subscription restrictions.
+> Although suitable VM sizes were listed as available in `West Europe` and `North Europe`, Azure subscription restrictions prevented deployment in those regions.
 >
-> The `Sweden Central` Azure region not only allowed me to deploy resources with my current subscription, but also had the required VM disk sizes available - hence my decision to deploy my lab environment in this region.
+> The `Sweden Central` region supported the required VM configuration and permitted deployment under the existing Azure subscription, therefore it was selected for the hybrid lab environment.
 
 ## Azure Environment and Configuration
 
@@ -60,10 +60,12 @@ The design places an Azure VM in a dedicated Azure workload subnet protected by 
 #### Budget Alerts
 A £20 monthly budget was configured in Azure Cost Management, with email notification thresholds set at `50%: £10`, `80%: £16` and `100%: £20`. These alerts provide early warning of increasing Azure costs during deployment and testing, helping to identify unexpected expenditure.
 
+> Budget alerts do not automatically stop resources or prevent further charges, so resource usage and associated costs must still be monitored.
+
 <img src="../Images/Budget%20Alerts.png" width="1000"/>
 
 ### Resource Group
-The resource group `rg-hybridlab-swc-01` was created in the `Sweden Central` region to contain the Phase 1 infrastructure.
+The resource group `rg-hybridlab-swc-01` was created in the `Sweden Central` region to contain the hybrid lab infrastructure.
 
 To organise the deployment, I adopted a consistent resource naming convention and defined the following tags for application across Azure resources:    
 `Project:HybridInfrastructureLab`, `Environment:Lab`, `Owner:PersonalLab`, `ManagedBy:Manual`, `CostCentre:Learning`
@@ -104,14 +106,14 @@ A Network Security Group was deployed and associated with the `snet-workloads-01
 <img src="../Images/Network%20Security%20Group.png" width="1000"/>
 
 ### Windows Server 2025 VM Deployment
-A Virtual Machine `AZ-LAB01` was provisioned, using a `Standard B2s V2` sized `Windows Server 2025 Datacenter Gen 2` image. I linked the network interface to the existing VNet and subnet, selected managed storage, and reviewed the security and management settings during deployment.
+A Virtual Machine `AZ-LAB01` was provisioned, using a `Standard_B2s_V2` sized `Windows Server 2025 Datacenter Gen 2` image. I linked the network interface to the existing VNet and subnet, configured a managed OS disk, and reviewed the security and management settings during deployment.
 
 |VM Component|Configuration|
 |---|---|
 |Name|`AZ-LAB01`|
 |Region|`Sweden Central`|
 |Operating System|`Windows Server 2025 Datacenter Gen 2`|
-|VM Size|`Standard B2s v2` (2vCPUs, 8GB memory)|
+|VM Size|`Standard_B2s_v2` (2vCPUs, 8GB memory)|
 |Private IP|`10.30.1.4`|
 |Public IP|`None`|
 |OS Disk|`Standard SSD LRS` (127GB)|
@@ -119,6 +121,13 @@ A Virtual Machine `AZ-LAB01` was provisioned, using a `Standard B2s V2` sized `W
 |Administration|`Bastion Developer`|
 
 <img src="../Images/Virtual%20Machine%202.png" width="1000"/>
+
+### Azure Bastion Developer
+Azure Bastion Developer was used to provide browser-based RDP administration of `AZ-LAB01` through the Azure portal, without requiring a public IP address on the virtual machine or exposing RDP directly to the internet.
+
+The Developer tier was selected because it provides free connectivity for development and testing environments using shared infrastructure. Unlike the paid Bastion tiers, it does not require a dedicated `AzureBastionSubnet` or public IP resource.
+
+An RDP session was established through the Azure portal using the VM's administrator credentials, confirming that the server could be accessed through Bastion using its private IP address (`10.30.1.4`).
 
 ### VM Storage and Lifecycle Management
 
