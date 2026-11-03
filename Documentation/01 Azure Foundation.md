@@ -18,7 +18,7 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 
 > The existing on-premises environment remained separate throughout this phase. No site-to-site VPN, Azure-hosted domain controller, AD domain join, Microsoft Entra Cloud Sync, Azure Arc or centralised monitoring integration was implemented as part of the initial implementation.
 
-## Existing On-Premises Environment
+### Existing On-Premises Environment
 
 |System|Existing Function|Address/Network|
 |---|---|---|
@@ -34,10 +34,15 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 |Lab WAN network|Hyper-V NAT-side network|`172.16.0.0/24`|
 
 ## Azure Architecture
-
-> The design places an Azure VM in a dedicated Azure workload subnet protected by a subnet-level NSG. Azure Bastion Developer provides browser-based administration. At this stage, there is no private connection to the on-premises lab, and Azure-provided DNS is used.
+The design places an Azure VM in a dedicated Azure workload subnet protected by a subnet-level NSG. Azure Bastion Developer provides browser-based administration. At this stage, there is no private connection to the on-premises lab, and Azure-provided DNS is used.
 
 <img src="../Images/Azure%20Architecture%20Diagram.png" width="700"/>
+
+> **Azure Region Decision:** My initial plan was to deploy the lab environment in `UK South`, however, there were no appropriate VM disk sizes available to deploy in this region, nor in `UK West`.
+>
+> The disk sizes necessary were available in regions `West Europe` and `North Europe`, however I was denied access to deploy resources in these regions due to Azure subscription restrictions.
+>
+> The `Sweden Central` Azure region not only allowed me to deploy resources with my current subscription, but also had the required VM disk sizes available - hence my decision to deploy my lab environment in this region.
 
 ## Azure Environment and Configuration
 
@@ -49,8 +54,6 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 |Tenant Display Name|`Baron Hybrid Home Lab`|
 |Subscription|`Azure Plan` (30-day free account trial)|
 |Administrative Access|Microsoft Entra account secured with MFA|
-
-> **Azure Region Decision:** My initial plan was to deploy the lab environment in my closest region - `UK South`, however, there were no appropriate VM disk sizes available to deploy in this region, nor in `UK West`. The disk sizes necessary were available in regions `West Europe` and `North Europe`, however I was unable to deploy resources in these regions due to subscription restrictions. The `Sweden Central` Azure region not only allowed me to deploy resources with my current subscription, but also had the required VM disk sizes available - hence my decision to deploy my lab environment in this region.
 
 <img src="../Images/Azure%20Subscription.png" width="1000"/>
 
