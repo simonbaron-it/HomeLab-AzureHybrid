@@ -57,7 +57,7 @@ The Phase 1 build centres on an Azure resource group, a private Virtual Network 
 #### Budget Alerts
 A £20 monthly budget was configured in Azure Cost Management, with email notification thresholds set at `50%: £10`, `80%: £16` and `100%: £20`. These alerts provide early warning of increasing Azure costs during deployment and testing, helping to identify unexpected expenditure.
 
-<img src="" width="1000"/>
+<img src="../Images/Budget%20Alerts.png" width="1000"/>
 
 ### Resource Group
 The resource group `rg-hybridlab-swc-01` was created in the `Sweden Central` region to contain the Phase 1 infrastructure.
@@ -114,6 +114,8 @@ A Virtual Machine `AZ-LAB01` was provisioned, using a `Standard B2s V2` sized `W
 |OS Disk|`Standard SSD LRS` (127GB)|
 |Boot Security|`Trusted Launch`, `Secure Boot` & `vTPM` enabled|
 |Administration|`Bastion Developer`|
+
+<img src="../Images/Virtual%20Machine%202.png" width="1000"/>
 
 ### VM Storage and Lifecycle Management
 
