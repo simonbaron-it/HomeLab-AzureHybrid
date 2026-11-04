@@ -153,10 +153,6 @@ Using Windows Disk Management, the new disk was initialised using GPT, formatted
 > ```
 
 ### Lifecycle Management
-The Azure VM `AZ-LAB01` is deallocated at the end of every lab session in order to stop VM compute charges and control expenditure.
-> Managed disks and certain other resources can continue to incur costs even when the VM is deallocated.
-
-<i>Deallocated VM screenshot</i>
 
 #### Temporary Public IP and Windows Updates
 To perform Windows Server updates, `AZ-LAB01` required outbound connectivity to Microsoft's update services. As the VM was deployed without a public IP or a dedicated outbound connectivity solution, a temporary public IP was associated with its network interface to provide internet access.
@@ -166,6 +162,12 @@ To perform Windows Server updates, `AZ-LAB01` required outbound connectivity to 
 Windows Update was used to check for and install available operating system updates. No inbound RDP rule was introduced, and administration continued through Azure Bastion Developer.
 
 > Once the updates were completed, the public IP was disassociated and the resource removed, returning the VM to its original private-only configuration.
+
+#### Deallocation
+The Azure VM `AZ-LAB01` is deallocated at the end of every lab session in order to stop VM compute charges and control expenditure.
+> Managed disks and certain other resources can continue to incur costs even when the VM is deallocated.
+
+<i>Deallocated VM screenshot</i>
 
 ## Phase 1 Summary
 `Phase 1` provided practical experience with Azure infrastructure deployment, resource governance, virtual networking, Windows Server administration and cost management.
