@@ -129,7 +129,22 @@ The Developer tier was selected because it provides free connectivity for develo
 
 An RDP session was established through the Azure portal using the VM's administrator credentials, confirming that the server could be accessed through Bastion using its private IP address (`10.30.1.4`).
 
-### VM Storage and Lifecycle Management
+### Managed Data Disk
+An additional managed data disk was attached to `AZ-LAB01` to provide storage separate from the operating system disk and demonstrate Azure VM disk management.
+
+|Component|Configuration|
+|---|---|
+|Disk Name|`disk-az-lab01-data-01`|
+|Disk Type|`Standard SSD LRS`|
+|Disk Size|`4GB`|
+|Drive Letter|`(E:)`|
+|File System|`NTFS`|
+
+Using Windows Disk Management, the new disk was initialised using GPT, formatted and assigned drive letter `(E:)`.
+
+<i>Test files and screenshot</i>
+
+### Lifecycle Management
 
 ## Validation and Testing
 
