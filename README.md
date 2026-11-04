@@ -38,7 +38,7 @@ The build will be documented as a series of practical engineering guides, listed
 
 |Area|Documentation|
 |---|---|
-|Azure Foundation|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Azure Foundation|![Planned](https://img.shields.io/badge/Status-In%20Progress-yellow)|
 |Hybrid Identity|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Azure Arc|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Monitoring|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
