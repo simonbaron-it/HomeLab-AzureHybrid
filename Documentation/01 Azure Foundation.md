@@ -142,12 +142,43 @@ An additional managed data disk was attached to `AZ-LAB01` to provide storage se
 
 Using Windows Disk Management, the new disk was initialised using GPT, formatted and assigned drive letter `(E:)`.
 
-<i>Test files and screenshot</i>
+<img src="../Images/VM%20Data%20Disk%202.png" width="700"/>
+
+> A test file was created on the managed disk using PowerShell
+> ```powershell
+> New-Item -Path 'E:\LabData' -ItemType Directory
+>
+> 'Azure managed disk test' |
+>    Out-File 'E:\LabData\Storage-Test.txt'
+> ```
 
 ### Lifecycle Management
+The Azure VM `AZ-LAB01` is deallocated at the end of every lab session in order to stop VM compute charges and control expenditure.
+> Managed disks and certain other resources can continue to incur costs even when the VM is deallocated.
 
-## Validation and Testing
+<i>Deallocated VM screenshot</i>
 
-## Troubleshooting
+#### Temporary Public IP and Windows Updates
+To perform Windows Server updates, `AZ-LAB01` required outbound connectivity to Microsoft's update services. As the VM was deployed without a public IP or a dedicated outbound connectivity solution, a temporary public IP was associated with its network interface to provide internet access.
 
-## Lessons and Next Steps
+<img src="../Images/VM%20Temp%20Public%20IP.png" width="700"/>
+
+Windows Update was used to check for and install available operating system updates. No inbound RDP rule was introduced, and administration continued through Azure Bastion Developer.
+
+> Once the updates were completed, the public IP was disassociated and the resource removed, returning the VM to its original private-only configuration.
+
+## Phase 1 Summary
+`Phase 1` provided practical experience with Azure infrastructure deployment, resource governance, virtual networking, Windows Server administration and cost management.
+
+- **Azure Infrastructure Deployment:** Provisioned and configured resource groups, virtual networks, Windows Server virtual machines and managed disks.
+- **Azure Networking:** Configured subnets, IP addressing, network security groups and network connectivity.
+- **Windows Server Administration:** Deployed and administered Windows Server 2025, including system configuration, updates and storage management.
+- **Cloud Security:** Configured network security controls and secure remote administration using Azure Bastion Developer.
+- **Cost Management:** Implemented budgets, cost alerts and resource tagging to control expenditure.
+
+## Next Steps
+`Phase 1` establishes the Azure infrastructure required for the next stage of the hybrid lab.
+
+`Phase 2: Hybrid Identity` will focus on integrating selected on-premises Active Directory identities with Microsoft Entra ID using Microsoft Entra Cloud Sync.
+
+This will include reviewing identity synchronisation requirements, configuring the necessary components and validating synchronisation of selected users and groups.
