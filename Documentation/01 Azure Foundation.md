@@ -129,6 +129,8 @@ The Developer tier was selected because it provides free connectivity for develo
 
 An RDP session was established through the Azure portal using the VM's administrator credentials, confirming that the server could be accessed through Bastion using its private IP address (`10.30.1.4`).
 
+<i>Screenshot of connection</i>
+
 ### Managed Data Disk
 An additional managed data disk was attached to `AZ-LAB01` to provide storage separate from the operating system disk and demonstrate Azure VM disk management.
 
@@ -170,6 +172,15 @@ The Azure VM `AZ-LAB01` is deallocated at the end of every lab session in order 
 <i>Deallocated VM screenshot</i>
 
 ## Validation and Testing
+
+|Validation|Evidence|
+|---|---|
+|VM Deployment|Windows Server VM provisioned in Sweden Central|
+|Secure Administration|Successful Bastion RDP session|
+|Managed Storage|Data disk initialised, formatted and test file created|
+|System Maintenance|Windows Updates installed|
+|Network Security|Temporary public IP removed after maintenance|
+|Lifecycle Management|VM deallocated after lab sessions|
 
 ## Phase 1 Summary
 `Phase 1` provided practical experience with Azure infrastructure deployment, resource governance, virtual networking, Windows Server administration and cost management.
