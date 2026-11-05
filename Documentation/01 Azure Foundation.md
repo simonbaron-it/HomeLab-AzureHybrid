@@ -129,7 +129,7 @@ The Developer tier was selected because it provides free connectivity for develo
 
 An RDP session was established through the Azure portal using the VM's administrator credentials, confirming that the server could be accessed through Bastion using its private IP address (`10.30.1.4`).
 
-<i>Screenshot of connection</i>
+<img src="../Images/Bastion%20Session.png" width="1000"/>
 
 ### Managed Data Disk
 An additional managed data disk was attached to `AZ-LAB01` to provide storage separate from the operating system disk and demonstrate Azure VM disk management.
@@ -169,7 +169,7 @@ Windows Update was used to check for and install available operating system upda
 The Azure VM `AZ-LAB01` is deallocated at the end of every lab session in order to stop VM compute charges and control expenditure.
 > Managed disks and certain other resources can continue to incur costs even when the VM is deallocated.
 
-<i>Deallocated VM screenshot</i>
+<img src="../Images/VM%20Deallocated.png" width="1000"/>
 
 ## Validation and Testing
 
