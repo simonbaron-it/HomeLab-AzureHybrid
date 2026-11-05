@@ -38,7 +38,7 @@ The build will be documented as a series of practical engineering guides, listed
 
 |Area|Documentation|
 |---|---|
-|Azure Foundation|[Deployment and administration of initial Azure environment](https://github.com/simonbaron-it/HomeLab-AzureHybrid/blob/fa35c75c234a2f3ed36519a173b036a18a05f8c8/Documentation/01%20Azure%20Foundation.md)|
+|Azure Foundation|[Deployment and administration of initial Azure environment](Documentation/01%20Azure%20Foundation.md)|
 |Hybrid Identity|![In Progress](https://img.shields.io/badge/Status-In%20Progress-yellow)|
 |Azure Arc|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Monitoring|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
