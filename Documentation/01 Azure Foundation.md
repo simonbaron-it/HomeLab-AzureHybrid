@@ -38,11 +38,11 @@ The design places an Azure VM in a dedicated Azure workload subnet protected by 
 
 <img src="../Images/Azure%20Architecture%20Diagram.png" width="700"/>
 
-> **Azure Region Decision:** The initial deployment plan targeted the `UK South` region, however the required VM size was unavailable to my Azure subscription in both `UK South` and `UK West`.
+> **Azure Region Decision:** The initial deployment plan targeted the `UK South` region, but the required VM size was unavailable to my Azure subscription in both `UK South` and `UK West`.
 >
 > Although suitable VM sizes were listed as available in `West Europe` and `North Europe`, Azure subscription restrictions prevented deployment in those regions.
 >
-> The `Sweden Central` region supported the required VM configuration and permitted deployment under the existing Azure subscription, therefore it was selected for the hybrid lab environment.
+> The `Sweden Central` region supported the required VM configuration and permitted deployment under the existing Azure subscription, so this region was selected for the hybrid lab environment.
 
 ## Azure Environment and Configuration
 
@@ -116,7 +116,7 @@ The virtual machine `AZ-LAB01` was deployed using the `Windows Server 2025 Datac
 |VM Size|`Standard_B2s_v2` (2 vCPUs, 8 GiB memory)|
 |Private IP|`10.30.1.4`|
 |Public IP|`None`|
-|OS Disk|`Standard SSD LRS` (127GB)|
+|OS Disk|`Standard SSD LRS` (127 GiB)|
 |Boot Security|`Trusted Launch`, `Secure Boot` & `vTPM` enabled|
 |Administration|`Bastion Developer`|
 
@@ -146,7 +146,7 @@ Using Windows Disk Management, the new disk was initialised using GPT, formatted
 
 <img src="../Images/VM%20Data%20Disk%202.png" width="700"/>
 
-> A test file was created on the managed disk using PowerShell
+> A test file was created on the managed disk using PowerShell.
 > ```powershell
 > New-Item -Path 'E:\LabData' -ItemType Directory
 >
@@ -173,7 +173,7 @@ The Azure VM `AZ-LAB01` is deallocated at the end of every lab session in order 
 
 ## Validation and Testing
 
-|Validation|Evidence|
+|Validation|Result|
 |---|---|
 |VM Deployment|Windows Server VM provisioned in Sweden Central|
 |Secure Administration|Successful Bastion RDP session|
