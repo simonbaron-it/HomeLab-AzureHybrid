@@ -11,7 +11,7 @@ The objective is to establish a small, controlled Azure deployment that could la
 - Prepare the Azure subscription, tenant, permissions and cost controls.
 - Deploy a virtual network, workload subnet and network security group (NSG).
 - Deploy and administer a Windows Server virtual machine without a permanent public IP.
-- Test private administration, storage, VM lifecycle operations and troubleshooting.
+- Validate secure VM administration, managed storage, Windows Update connectivity and VM lifecycle management.
 
 ## Scope
 The Phase 1 build centres on an Azure resource group, a private Virtual Network and workload subnet, an associated NSG, and a Windows Server 2025 virtual machine. Administration is designed around private access rather than exposing RDP publicly.
@@ -106,14 +106,14 @@ A Network Security Group was deployed and associated with the `snet-workloads-01
 <img src="../Images/Network%20Security%20Group.png" width="1000"/>
 
 ### Windows Server 2025 VM Deployment
-The Virtual Machine `AZ-LAB01` was deployed using the `Windows Server 2025 Datacenter Gen 2` image and the `Standard_B2s_v2` VM size. I connected its network interface to the existing VNet and workload subnet, configured a managed OS disk, and reviewed the security and management settings during deployment.
+The virtual machine `AZ-LAB01` was deployed using the `Windows Server 2025 Datacenter Gen 2` image and the `Standard_B2s_v2` VM size. I connected its network interface to the existing VNet and workload subnet, configured a managed OS disk, and reviewed the security and management settings during deployment.
 
 |VM Component|Configuration|
 |---|---|
 |Name|`AZ-LAB01`|
 |Region|`Sweden Central`|
 |Operating System|`Windows Server 2025 Datacenter Gen 2`|
-|VM Size|`Standard_B2s_v2` (2vCPUs, 8GB memory)|
+|VM Size|`Standard_B2s_v2` (2 vCPUs, 8 GiB memory)|
 |Private IP|`10.30.1.4`|
 |Public IP|`None`|
 |OS Disk|`Standard SSD LRS` (127GB)|
@@ -136,7 +136,7 @@ An additional managed data disk was attached to `AZ-LAB01` to provide storage se
 |---|---|
 |Disk Name|`disk-az-lab01-data-01`|
 |Disk Type|`Standard SSD LRS`|
-|Disk Size|`4GB`|
+|Disk Size|`4 GiB`|
 |Drive Letter|`(E:)`|
 |File System|`NTFS`|
 
@@ -155,7 +155,7 @@ Using Windows Disk Management, the new disk was initialised using GPT, formatted
 ### Lifecycle Management
 
 #### Temporary Public IP and Windows Updates
-To perform Windows Server updates, `AZ-LAB01` required outbound connectivity to Microsoft's update services. As the VM was deployed without a public IP or a dedicated outbound connectivity solution, a temporary public IP was associated with its network interface to provide internet access.
+To perform Windows Server updates, `AZ-LAB01` required outbound connectivity to Microsoft's update services. As the workload subnet had no default outbound internet access and no dedicated outbound connectivity solution, a temporary public IP was associated with the VM's network interface to enable Windows Update connectivity.
 
 <img src="../Images/VM%20Temp%20Public%20IP.png" width="700"/>
 
@@ -168,6 +168,8 @@ The Azure VM `AZ-LAB01` is deallocated at the end of every lab session in order 
 > Managed disks and certain other resources can continue to incur costs even when the VM is deallocated.
 
 <i>Deallocated VM screenshot</i>
+
+## Validation and Testing
 
 ## Phase 1 Summary
 `Phase 1` provided practical experience with Azure infrastructure deployment, resource governance, virtual networking, Windows Server administration and cost management.
