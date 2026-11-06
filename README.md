@@ -54,4 +54,3 @@ The build will be documented as a series of practical engineering guides, listed
 - <b>Hybrid Storage, Backup & Recovery:</b>  Configure Azure Files and File Sync, manage server patching through Azure Update Manager, and validate backup and recovery procedures.
 - <b>PowerShell & Infrastructure as Code:</b>  Automate infrastructure administration, health checks and reporting using PowerShell, and deploy Azure resources using Bicep.
 - <b>Infrastructure Security & Governance:</b>  Apply least-privilege access, network security controls, resource governance and Azure cost management practices.
-- <b>Technical Documentation & Operations:</b>  Produce architecture diagrams, implementation guides, operational runbooks and incident reports documenting configuration, testing and root-cause analysis.
