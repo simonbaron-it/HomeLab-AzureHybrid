@@ -46,7 +46,9 @@ The Microsoft Entra Cloud Sync provisioning agent runs on `MGMT01` and communica
 
 <i> Hybrid identity architecture diagram</i>
 
-> **Deployment Decision:** A dedicated Cloud Sync VM was originally considered, but available Hyper-V resources were limited. The provisioning agent was therefore deployed on MGMT01, which already provides management and monitoring services. This avoids introducing another virtual machine, although it requires additional resource monitoring and security considerations because the Cloud Sync agent is a privileged identity component.
+> **Deployment Decision:** A dedicated Cloud Sync VM was originally considered, but available Hyper-V resources were limited. The provisioning agent was therefore deployed on MGMT01, which already provides management and monitoring services.
+>
+> This avoids introducing another virtual machine, although it requires additional resource monitoring and security considerations because the Cloud Sync agent is a privileged identity component.
 
 ## Hybrid Identity Configuration
 ### Custom Domain and UPN Configuration
@@ -86,10 +88,49 @@ The following checks were performed:
 ### Pilot Organisational Unit
 A dedicated OU named `CloudSync-Pilot` was created to separate test identities from existing users and administrative accounts.
 
-The following pilot accounts were created, using the `New-ADUserFromCSV.ps1` PowerShell Script built in my [Windows Server 2025 Infrastructure Lab Project:](https://github.com/simonbaron-it/HomeLab-EnterpriseEnvironment/tree/main)
+The following pilot accounts were created:
 
 |User|AD Username|Cloud UPN|
 |---|---|---|
 |Alex Morgan|amorgan|amorgan@simonbaron.co.uk|
 |Jamie Taylor|jtaylor|jtaylor@simonbaron.co.uk|
 |Sam Carter|scarter|scarter@simonbaron.co.uk|
+
+Two Global Security Groups were also created:
+
+|Group|Initial Members|
+|---|---|
+|`CloudSync-IT`|`Alex Morgan`, `Jamie Taylor`|
+|`CloudSync-Operations`|`Sam Carter`|
+
+> The `CloudSync-Pilot` OU allows synchronisation and account lifecycle changes to be tested without modifying the existing infrastructure users or privileged security groups.
+
+<i>screenshot: Pilot OU containing users and groups</i>
+
+## Cloud Sync Agent Deployment
+The Microsoft Entra Cloud Sync provisioning agent was installed on the existing `MGMT01` virtual machine.
+
+Before installation, server performance, Active Directory connectivity and outbound Microsoft service connectivity were reviewed.
+
+|Component|Configuration|
+|---|---|
+|Server|`MGMT01`|
+|Operating System|`Windows Server 2025`|
+|Existing Roles|`Windows Admin Center`, `Windows Event Forwarding`|
+|Additional Component|`Microsoft Entra Cloud Sync Provisioning Agent`|
+|Agent Version|`-`|
+|Connected AD Domain|`baron.example.com`|
+|Service Account|`-`|
+|Agent Status|`-`|
+
+The provisioning agent was registered with the existing Microsoft Entra tenant and configured to communicate with the on-premises Active Directory domain using a group Managed Service Account (gMSA).
+
+Following installation, the agent's registration and service status were verified through the Microsoft Entra admin centre.
+
+The existing Windows Admin Center and Windows Event Forwarding functionality was also checked to ensure the additional service had not disrupted original `MGMT01` responsibilities.
+
+<i>screenshot: Registered Cloud Sync agent in Entra</i>
+
+### Synchronisation Configuration
+A new AD to Microsoft Entra ID sync configuration was created using the registered provisioning agent.
+
