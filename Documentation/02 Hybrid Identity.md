@@ -127,10 +127,97 @@ The provisioning agent was registered with the existing Microsoft Entra tenant a
 
 Following installation, the agent's registration and service status were verified through the Microsoft Entra admin centre.
 
-The existing Windows Admin Center and Windows Event Forwarding functionality was also checked to ensure the additional service had not disrupted original `MGMT01` responsibilities.
+> The existing Windows Admin Center and Windows Event Forwarding functionality was also checked to ensure the additional service had not disrupted original `MGMT01` responsibilities.
 
 <i>screenshot: Registered Cloud Sync agent in Entra</i>
 
 ### Synchronisation Configuration
-A new AD to Microsoft Entra ID sync configuration was created using the registered provisioning agent.
+A new **AD to Microsoft Entra ID sync** configuration was created using the registered provisioning agent.
 
+|Setting|Configuration|
+|---|---|
+|Source Directory|`baron.example.com`|
+|Target Directory|`Baron Hybrid Home Lab`|
+|Provisioning Agent|`MGMT01`|
+|Syncronisation Direction|`AD to Microsoft Entra ID`|
+|Scope|`Selected Organisational Units`|
+|Selected OU|`CloudSync-Pilot`|
+|Password Hash Synchronisation|`Enabled`|
+|Accidental Deletion Protection|`Enabled`|
+
+> Synchronisation was restricted to the pilot OU rather than the entire Active Directory environment.
+>
+> Default attribute mappings were reviewed, including `userPrincipalName`, `displayName`, `givenName`, `sn`, `department` and `title`.
+
+Initial provisioning test??
+
+<i>screenshot: Cloud Sync configuration and OU scoping</i>
+
+### Initial Identity Synchronisation
+After enabling the configuration, the initial provisioning cycle was monitored through Microsoft Entra provisioning logs.
+
+The pilot users and security groups were then checked in the Entra admin centre to verify that the expected objects had been created.
+
+**Initial synchronisation results:**
+- Users successfully synchronised: [Number]
+- Groups successfully synchronised: [Number]
+- Synchronisation errors: [Number or description]
+- Cloud UPN suffix: **simonbaron.co.uk**
+- Initial provisioning status: [Successful / issues identified]
+
+<i>screenshot: Synchronised users in Microsoft Entra ID</i>
+<i>screenshot: Synchronised security groups</i>
+
+## Identity Lifecycle Validation and Testing
+A series of tests was performed to confirm that user lifecycle changes originating in on-premises Active Directory were correctly reflected in Microsoft Entra ID.
+
+<i> 
+- Cloud Authentication
+  
+- New User Provisioning
+  
+- Attribute Synchronisation
+  
+- Password Hash Synchronisation
+  
+- Group Membership Updates
+  
+- Account Disablement
+  
+- Account Re-enablement
+</i>
+
+## Security and Operational Considerations
+### Identity Security
+The implementation was designed to limit the impact of synchronisation on the existing infrastructure.
+
+Key considerations included:
+- Restricting initial synchronisation to a dedicated pilot OU.
+- Excluding privileged AD accounts from the pilot.
+- Retaining a cloud-only Entra administrative account.
+- Using a group Managed Service Account for the provisioning agent.
+- Maintaining secure administrative access to `MGMT01`.
+- Reviewing accidental deletion protection.
+- Keeping on-premises `AD` as the source of authority for synchronised objects.
+
+### Cost Management
+Microsoft Entra ID Free and Microsoft Entra Cloud Sync were used to implement the basic hybrid identity synchronisation.
+
+The provisioning agent was installed on existing on-premises infrastructure, avoiding the need to deploy another Hyper-V VM or additional Azure compute resources.
+
+## Phase 2 Summary
+Phase 2 provides practical experience with hybrid identity configuration, Active Directory integration, Microsoft Entra ID administration and synchronisation.
+
+The key areas covered were:
+- Hybrid Identity Integration
+- Custom Domain Configuration
+- Cloud Sync Deployment
+- Identity Administration
+- Infrastructure Management
+
+## Next Steps
+**Phase 3: Hybrid Management** will focus on integrating the existing on-premises Windows Server environment with Azure Arc.
+
+The next stage will include onboarding selected servers, including `FS01` and `MGMT01`, to Azure Arc to provide centralised inventory, management and visibility through Microsoft Azure.
+
+The Cloud Sync configuration established in Phase 2 will remain available for further hybrid identity testing and ongoing operational monitoring.
