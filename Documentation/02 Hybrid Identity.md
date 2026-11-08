@@ -44,7 +44,7 @@ The hybrid identity implementation uses the existing Active Directory domain con
 
 The Microsoft Entra Cloud Sync provisioning agent runs on `MGMT01` and communicates with Microsoft Entra ID using outbound HTTPS connections. Selected users, groups and password hashes are synchronised to the cloud, while on-premises Active Directory remains responsible for managing the source identities.
 
-<i> Hybrid identity architecture diagram</i>
+<img src="../Images/Phase%202%20Hybrid%20Identity%20Architecture.png" width="1000"/>
 
 > **Deployment Decision:** A dedicated Cloud Sync VM was originally considered, but available Hyper-V resources were limited. The provisioning agent was therefore deployed on MGMT01, which already provides management and monitoring services.
 >
@@ -64,26 +64,37 @@ The domain's ownership was verified through Microsoft Entra ID before being conf
 |Example Pilot UPN|`amorgan@simonbaron.co.uk`|
 |Domain Verification Method|`DNS TXT Record`|
 
-The alternative UPN suffix was added through Active Directory Domains and Trusts, allowing selected AD accounts to use the verified custom domain for cloud authentication.
+The alternative UPN suffix was added through Active Directory Domains and Trusts, allowing selected AD accounts to use the verified custom domain for cloud authentication. Existing domain controller names, AD DNS services and the internal domain namespace were retained.
 
-> Existing domain controller names, AD DNS services and the internal domain namespace were retained.
+> Entra ID custom domain registration
+<img src="../Images/Custom%20Domain%20-%20Entra.png" width="1000"/>
 
-<i>Insert screenshot: Verified custom domain in Microsoft Entra ID</i>
-
-<i>Insert screenshot: Alternative UPN suffix in Active Directory Domains and Trusts</i>
+> AD Domains and Trusts alternative UPN suffix
+<img src="../Images/Custom%20Domain%20-%20AD.png" width="1000"/>
 
 ## Active Directory Preparation
 Before enabling synchronisation, Active Directory health and replication were checked to confirm the existing environment was operating correctly.
 
 The following checks were performed:
 - Domain controller health using dcdiag.   
-<i>Insert PowerShell or screenshot</i>
+```powershell
+dcdiag /q
+```
 - Active Directory replication using repadmin.   
-<i>Insert PowerShell or screenshot</i>
+```powershell
+repadmin /replsummary
+```
 - DNS resolution and domain controller discovery.   
-<i>Insert PowerShell or screenshot</i>
+```powershell
+Resolve-DnsName login.microsoftonline.com
+
+Get-ADDomainController -Filter * |
+    Select-Object HostName, IPv4Address
+```
 - Verification of available domain controller backups.   
-<i>Insert PowerShell or screenshot</i>
+```powershell
+wbadmin get versions
+```
 
 ### Pilot Organisational Unit
 A dedicated OU named `CloudSync-Pilot` was created to separate test identities from existing users and administrative accounts.
@@ -92,9 +103,9 @@ The following pilot accounts were created:
 
 |User|AD Username|Cloud UPN|
 |---|---|---|
-|Alex Morgan|amorgan|amorgan@simonbaron.co.uk|
-|Jamie Taylor|jtaylor|jtaylor@simonbaron.co.uk|
-|Sam Carter|scarter|scarter@simonbaron.co.uk|
+|Alex Morgan|`amorgan`|`amorgan@simonbaron.co.uk`|
+|Jamie Taylor|`jtaylor`|`jtaylor@simonbaron.co.uk`|
+|Sam Carter|`scarter`|`scarter@simonbaron.co.uk`|
 
 Two Global Security Groups were also created:
 
@@ -105,7 +116,7 @@ Two Global Security Groups were also created:
 
 > The `CloudSync-Pilot` OU allows synchronisation and account lifecycle changes to be tested without modifying the existing infrastructure users or privileged security groups.
 
-<i>screenshot: Pilot OU containing users and groups</i>
+<img src="../Images/CloudSync%20AD%20OU.png" width="1000"/>
 
 ## Cloud Sync Agent Deployment
 The Microsoft Entra Cloud Sync provisioning agent was installed on the existing `MGMT01` virtual machine.
@@ -118,10 +129,10 @@ Before installation, server performance, Active Directory connectivity and outbo
 |Operating System|`Windows Server 2025`|
 |Existing Roles|`Windows Admin Center`, `Windows Event Forwarding`|
 |Additional Component|`Microsoft Entra Cloud Sync Provisioning Agent`|
-|Agent Version|`-`|
+|Agent Version|`1.1.2507.0`|
 |Connected AD Domain|`baron.example.com`|
-|Service Account|`-`|
-|Agent Status|`-`|
+|Service Account|`Group Managed Service Account` (gMSA)|
+|Agent Status|`Active`|
 
 The provisioning agent was registered with the existing Microsoft Entra tenant and configured to communicate with the on-premises Active Directory domain using a group Managed Service Account (gMSA).
 
@@ -129,7 +140,7 @@ Following installation, the agent's registration and service status were verifie
 
 > The existing Windows Admin Center and Windows Event Forwarding functionality was also checked to ensure the additional service had not disrupted original `MGMT01` responsibilities.
 
-<i>screenshot: Registered Cloud Sync agent in Entra</i>
+<img src="../Images/Entra%20Connect%20Agent%20Active.png" width="1000"/>
 
 ### Synchronisation Configuration
 A new **AD to Microsoft Entra ID sync** configuration was created using the registered provisioning agent.
@@ -149,9 +160,9 @@ A new **AD to Microsoft Entra ID sync** configuration was created using the regi
 >
 > Default attribute mappings were reviewed, including `userPrincipalName`, `displayName`, `givenName`, `sn`, `department` and `title`.
 
-Initial provisioning test??
+<img src="../Images/Entra%20Connect%20Agent%20Properties.png" width="1000"/>
 
-<i>screenshot: Cloud Sync configuration and OU scoping</i>
+<img src="../Images/Entra%20Connect%20Agent%20Scope.png" width="1000"/>
 
 ### Initial Identity Synchronisation
 After enabling the configuration, the initial provisioning cycle was monitored through Microsoft Entra provisioning logs.
@@ -159,33 +170,27 @@ After enabling the configuration, the initial provisioning cycle was monitored t
 The pilot users and security groups were then checked in the Entra admin centre to verify that the expected objects had been created.
 
 **Initial synchronisation results:**
-- Users successfully synchronised: [Number]
-- Groups successfully synchronised: [Number]
-- Synchronisation errors: [Number or description]
-- Cloud UPN suffix: **simonbaron.co.uk**
-- Initial provisioning status: [Successful / issues identified]
+- Users successfully synchronised: **`3`** 
+- Groups successfully synchronised: **`2`**
+- Synchronisation errors: **`0`**
+- Cloud UPN suffix: **`simonbaron.co.uk`**
+- Initial provisioning status: **`Successful`**
 
-<i>screenshot: Synchronised users in Microsoft Entra ID</i>
-<i>screenshot: Synchronised security groups</i>
+<img src="../Images/Entra%20Cloud%20Sync%20Users.png" width="1000"/>
+
+<img src="../Images/Entra%20Cloud%20Sync%20Groups.png" width="1000"/>
 
 ## Identity Lifecycle Validation and Testing
 A series of tests was performed to confirm that user lifecycle changes originating in on-premises Active Directory were correctly reflected in Microsoft Entra ID.
 
-<i> 
-- Cloud Authentication
-  
-- New User Provisioning
-  
-- Attribute Synchronisation
-  
-- Password Hash Synchronisation
-  
-- Group Membership Updates
-  
-- Account Disablement
-  
-- Account Re-enablement
-</i>
+|Test|Action|Outcome|
+|---|---|---|
+|Cloud Authentication|Account `amorgan@simonbaron.co.uk` was signed into their online Microsoft account.|Successful online sign-in|
+|New User Provisioning|New user Casey Reed was created in the `CloudSync-Pilot` OU in the on-premises AD.|Successful Entra ID replication|
+|Attribute Synchronisation|`jtaylor@simonbaron.co.uk's` AD attributes `Job Title` and `Department` were edited.|Successful Entra ID replication|
+|Password Hash Synchronisation|`amorgan@simonbaron.co.uk's` password was changed in AD.|Successful sign-in with new password|
+|Group Membership Updates|`creed@simonbaron.co.uk` was added to the `CloudSync-Operations` security group|Successful Entra ID replication|
+|Account Disablement|`scarter@simonbaron.co.uk's` account was disabled in AD|Account disabled in Entra ID|
 
 ## Security and Operational Considerations
 ### Identity Security
