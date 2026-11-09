@@ -171,7 +171,7 @@ The pilot users and security groups were checked in the Entra admin centre to ve
 <img src="../Images/Entra%20Cloud%20Sync%20Groups.png" width="1000"/>
 
 ## Identity Lifecycle Validation and Testing
-A series of tests was performed to confirm that user lifecycle changes originating in on-premises Active Directory were correctly reflected in Microsoft Entra ID.
+A series of tests were performed to confirm that user lifecycle changes originating in on-premises Active Directory were correctly reflected in Microsoft Entra ID.
 
 |Test|Action|Outcome|
 |---|---|---|
