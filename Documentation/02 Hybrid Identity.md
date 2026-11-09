@@ -14,9 +14,8 @@ The objective is to establish hybrid identity synchronisation, allowing selected
 - Configure a verified custom domain for consistent on-premises and cloud user sign-in names.
 - Deploy Microsoft Entra Cloud Sync using an existing Windows Server VM.
 - Synchronise selected Active Directory users and security groups.
-- Implement and validate Password Hash Synchronisation (PHS).
+- Implement and validate Password Hash Synchronisation.
 - Test user provisioning, attribute updates, group membership changes and account disablement.
-- Simulate, troubleshoot and recover from a synchronisation failure.
 
 ## Scope
 Phase 2 introduces hybrid identity synchronisation between the existing `baron.example.com` Active Directory domain and the Microsoft Entra tenant established during Phase 1.
@@ -42,11 +41,11 @@ Microsoft Entra Cloud Sync is deployed on the existing `MGMT01` server to avoid 
 ## Hybrid Identity Architecture
 The hybrid identity implementation uses the existing Active Directory domain controllers as the authoritative source for synchronised identities.
 
-The Microsoft Entra Cloud Sync provisioning agent runs on `MGMT01` and communicates with Microsoft Entra ID using outbound HTTPS connections. Selected users, groups and password hashes are synchronised to the cloud, while on-premises Active Directory remains responsible for managing the source identities.
+The Microsoft Entra Cloud Sync provisioning agent runs on `MGMT01` and communicates with Microsoft Entra ID using outbound HTTPS connections. Selected users and groups are provisioned into Microsoft Entra ID, with password hash synchronisation enabling cloud authentication using their on-premises credentials.
 
 <img src="../Images/Phase%202%20Hybrid%20Identity%20Architecture.png" width="1000"/>
 
-> **Deployment Decision:** A dedicated Cloud Sync VM was originally considered, but available Hyper-V resources were limited. The provisioning agent was therefore deployed on MGMT01, which already provides management and monitoring services.
+> **Deployment Decision:** A dedicated Cloud Sync VM was originally considered, but available Hyper-V resources were limited. The provisioning agent was therefore deployed on `MGMT01`, which already provides management and monitoring services.
 >
 > This avoids introducing another virtual machine, although it requires additional resource monitoring and security considerations because the Cloud Sync agent is a privileged identity component.
 
@@ -107,7 +106,7 @@ The following pilot accounts were created:
 |Jamie Taylor|`jtaylor`|`jtaylor@simonbaron.co.uk`|
 |Sam Carter|`scarter`|`scarter@simonbaron.co.uk`|
 
-Two Global Security Groups were also created:
+Two global security groups were also created:
 
 |Group|Initial Members|
 |---|---|
@@ -150,11 +149,12 @@ A new **AD to Microsoft Entra ID sync** configuration was created using the regi
 |Source Directory|`baron.example.com`|
 |Target Directory|`Baron Hybrid Home Lab`|
 |Provisioning Agent|`MGMT01`|
-|Syncronisation Direction|`AD to Microsoft Entra ID`|
+|Synchronisation Direction|`AD to Microsoft Entra ID`|
 |Scope|`Selected Organisational Units`|
 |Selected OU|`CloudSync-Pilot`|
 |Password Hash Synchronisation|`Enabled`|
 |Accidental Deletion Protection|`Enabled`|
+|Accidental Deletion Threshold|`2 objects`|
 
 > Synchronisation was restricted to the pilot OU rather than the entire Active Directory environment.
 >
@@ -165,9 +165,7 @@ A new **AD to Microsoft Entra ID sync** configuration was created using the regi
 <img src="../Images/Entra%20Connect%20Agent%20Scope.png" width="1000"/>
 
 ### Initial Identity Synchronisation
-After enabling the configuration, the initial provisioning cycle was monitored through Microsoft Entra provisioning logs.
-
-The pilot users and security groups were then checked in the Entra admin centre to verify that the expected objects had been created.
+The pilot users and security groups were checked in the Entra admin centre to verify that the expected objects had been created.
 
 **Initial synchronisation results:**
 - Users successfully synchronised: **`3`** 
@@ -185,12 +183,12 @@ A series of tests was performed to confirm that user lifecycle changes originati
 
 |Test|Action|Outcome|
 |---|---|---|
-|Cloud Authentication|Account `amorgan@simonbaron.co.uk` was signed into their online Microsoft account.|Successful online sign-in|
-|New User Provisioning|New user Casey Reed was created in the `CloudSync-Pilot` OU in the on-premises AD.|Successful Entra ID replication|
-|Attribute Synchronisation|`jtaylor@simonbaron.co.uk's` AD attributes `Job Title` and `Department` were edited.|Successful Entra ID replication|
-|Password Hash Synchronisation|`amorgan@simonbaron.co.uk's` password was changed in AD.|Successful sign-in with new password|
-|Group Membership Updates|`creed@simonbaron.co.uk` was added to the `CloudSync-Operations` security group|Successful Entra ID replication|
-|Account Disablement|`scarter@simonbaron.co.uk's` account was disabled in AD|Account disabled in Entra ID|
+|Cloud Authentication|Signed in to a Microsoft Entra-integrated service using the synchronised work or school account `amorgan@simonbaron.co.uk`|Successful sign-in using synchronised Entra work or school credentials|
+|New User Provisioning|New user Casey Reed was created in the `CloudSync-Pilot` OU in the on-premises AD.|New AD user successfully provisioned into Microsoft Entra ID|
+|Attribute Synchronisation|The Job Title and Department attributes of `jtaylor@simonbaron.co.uk` were updated in Active Directory.|Updated Job Title and Department values reflected in Entra ID|
+|Password Hash Synchronisation|`amorgan@simonbaron.co.uk's` password was changed in AD.|Successful cloud sign-in using the updated AD password|
+|Group Membership Updates|`creed@simonbaron.co.uk` was added to the `CloudSync-Operations` security group|Updated security group membership reflected in Entra ID|
+|Account Disablement|The account `scarter@simonbaron.co.uk` was disabled in AD|Synchronised account disabled for new Entra sign-ins|
 
 ## Security and Operational Considerations
 ### Identity Security
@@ -211,14 +209,13 @@ Microsoft Entra ID Free and Microsoft Entra Cloud Sync were used to implement th
 The provisioning agent was installed on existing on-premises infrastructure, avoiding the need to deploy another Hyper-V VM or additional Azure compute resources.
 
 ## Phase 2 Summary
-Phase 2 provides practical experience with hybrid identity configuration, Active Directory integration, Microsoft Entra ID administration and synchronisation.
+Phase 2 established hybrid identity synchronisation between the existing on-premises Active Directory environment and Microsoft Entra ID.
 
-The key areas covered were:
-- Hybrid Identity Integration
-- Custom Domain Configuration
-- Cloud Sync Deployment
-- Identity Administration
-- Infrastructure Management
+- **Hybrid Identity:** Verified the `simonbaron.co.uk` domain and configured an alternative Active Directory UPN suffix for cloud sign-in.
+- **Cloud Sync Deployment:** Installed and registered the Microsoft Entra provisioning agent on MGMT01, using a group Managed Service Account.
+- **Identity Synchronisation:** Successfully synchronised three pilot users and two security groups from the `CloudSync-Pilot` OU.
+- **Identity Lifecycle:** Validated user provisioning, attribute changes, password hash synchronisation, group membership updates and account disablement.
+- **Security:** Restricted synchronisation scope, excluded privileged AD identities and enabled accidental-deletion protection.
 
 ## Next Steps
 **Phase 3: Hybrid Management** will focus on integrating the existing on-premises Windows Server environment with Azure Arc.
