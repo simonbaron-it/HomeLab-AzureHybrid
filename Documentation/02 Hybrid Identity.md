@@ -186,7 +186,7 @@ A series of tests was performed to confirm that user lifecycle changes originati
 |Cloud Authentication|Signed in to a Microsoft Entra-integrated service using the synchronised work or school account `amorgan@simonbaron.co.uk`|Successful sign-in using synchronised Entra work or school credentials|
 |New User Provisioning|New user Casey Reed was created in the `CloudSync-Pilot` OU in the on-premises AD.|New AD user successfully provisioned into Microsoft Entra ID|
 |Attribute Synchronisation|The Job Title and Department attributes of `jtaylor@simonbaron.co.uk` were updated in Active Directory.|Updated Job Title and Department values reflected in Entra ID|
-|Password Hash Synchronisation|`amorgan@simonbaron.co.uk's` password was changed in AD.|Successful cloud sign-in using the updated AD password|
+|Password Hash Synchronisation|The password for `amorgan@simonbaron.co.uk` was changed in AD.|Successful cloud sign-in using the updated AD password|
 |Group Membership Updates|`creed@simonbaron.co.uk` was added to the `CloudSync-Operations` security group|Updated security group membership reflected in Entra ID|
 |Account Disablement|The account `scarter@simonbaron.co.uk` was disabled in AD|Synchronised account disabled for new Entra sign-ins|
 
