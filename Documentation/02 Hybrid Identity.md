@@ -75,25 +75,17 @@ The alternative UPN suffix was added through Active Directory Domains and Trusts
 Before enabling synchronisation, Active Directory health and replication were checked to confirm the existing environment was operating correctly.
 
 The following checks were performed:
-- Domain controller health using dcdiag.   
-```powershell
-dcdiag /q
-```
-- Active Directory replication using repadmin.   
-```powershell
-repadmin /replsummary
-```
-- DNS resolution and domain controller discovery.   
-```powershell
-Resolve-DnsName login.microsoftonline.com
 
-Get-ADDomainController -Filter * |
-    Select-Object HostName, IPv4Address
-```
-- Verification of available domain controller backups.   
-```powershell
-wbadmin get versions
-```
+|Validation|Command|
+|---|---|
+|Domain Controller Health|`dcdiag /q`|
+|AD Replication|`repadmin /replsummary`|
+|Internal DNS Resolution|`Resolve-DnsName dc01.baron.example.com`|
+|Domain Controller Discovery|`nltest /dsgetdc:baron.example.com`|
+|External DNS Resolution|`Resolve-DnsName login.microsoftonline.com`|
+|Backup Availability|`wbadmin get versions`|
+
+> These checks were intended to identify existing directory health, replication, DNS or backup issues before introducing cloud identity synchronisation.
 
 ### Pilot Organisational Unit
 A dedicated OU named `CloudSync-Pilot` was created to separate test identities from existing users and administrative accounts.
@@ -183,12 +175,32 @@ A series of tests was performed to confirm that user lifecycle changes originati
 
 |Test|Action|Outcome|
 |---|---|---|
-|Cloud Authentication|Signed in to a Microsoft Entra-integrated service using the synchronised work or school account `amorgan@simonbaron.co.uk`|Successful sign-in using synchronised Entra work or school credentials|
-|New User Provisioning|New user Casey Reed was created in the `CloudSync-Pilot` OU in the on-premises AD.|New AD user successfully provisioned into Microsoft Entra ID|
-|Attribute Synchronisation|The Job Title and Department attributes of `jtaylor@simonbaron.co.uk` were updated in Active Directory.|Updated Job Title and Department values reflected in Entra ID|
-|Password Hash Synchronisation|The password for `amorgan@simonbaron.co.uk` was changed in AD.|Successful cloud sign-in using the updated AD password|
-|Group Membership Updates|`creed@simonbaron.co.uk` was added to the `CloudSync-Operations` security group|Updated security group membership reflected in Entra ID|
-|Account Disablement|The account `scarter@simonbaron.co.uk` was disabled in AD|Synchronised account disabled for new Entra sign-ins|
+|Cloud Authentication|Signed in to work or school account `amorgan`|Successful cloud sign-in|
+|New User Provisioning|Created pilot user `creed` in AD.|Successfully provisioned in Entra ID|
+|Attribute Synchronisation|Updated `jtaylor` AD attributes.|Changes synchronised in Entra ID|
+|Password Hash Synchronisation|Changed password for `amorgan` in AD.|Successful cloud sign-in with new password|
+|Group Membership Updates|Added `creed` to security group|Membership synchronised in Entra ID|
+|Account Disablement|Disabled `scarter` in AD|Cloud account disabled|
+
+### New User Provisioning
+New user `creed` was created in AD. The provisioned account was validated in Entra ID.
+
+<i>Screenshot</i>
+
+### Attribute Synchronisation
+The `Job Title` and `Department` AD attributes were updated for the account `jtaylor`. These changes were validated in Entra ID.
+
+<i>Screenshot</i>
+
+### Group Membership Updates
+User `creed` was added to the AD security group `CloudSync-Operations`. The group was inspected in Entra ID to validate membership updates.
+
+<i>Screenshot</i>
+
+### Account Disablement
+The AD account `scarter` was disabled. Entra ID was inspected to verify the cloud account had been disabled.
+
+<i>Screenshot</i>
 
 ## Security and Operational Considerations
 ### Identity Security
