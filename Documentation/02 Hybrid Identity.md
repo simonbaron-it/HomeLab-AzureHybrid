@@ -1,7 +1,7 @@
 # Hybrid Identity
 > This documentation covers the integration of the existing on-premises Active Directory environment with Microsoft Entra ID using Microsoft Entra Cloud Sync.
 >
-> The implementation focuses on hybrid identity synchronisation, user and group management, authentication, security and operational troubleshooting.
+> The implementation focuses on hybrid identity synchronisation, user and group management, authentication and security.
 
 ## Scenario and Objectives
 ### Business Scenario
@@ -76,14 +76,14 @@ Before enabling synchronisation, Active Directory health and replication were ch
 
 The following checks were performed:
 
-|Validation|Command|
-|---|---|
-|Domain Controller Health|`dcdiag /q`|
-|AD Replication|`repadmin /replsummary`|
-|Internal DNS Resolution|`Resolve-DnsName dc01.baron.example.com`|
-|Domain Controller Discovery|`nltest /dsgetdc:baron.example.com`|
-|External DNS Resolution|`Resolve-DnsName login.microsoftonline.com`|
-|Backup Availability|`wbadmin get versions`|
+|Validation|Command|Result|
+|---|---|---|
+|Domain Controller Health|`dcdiag /q`|No errors reported|
+|AD Replication|`repadmin /replsummary`|No replication failures|
+|Internal DNS Resolution|`Resolve-DnsName dc01.baron.example.com`|Correct address resolved|
+|Domain Controller Discovery|`nltest /dsgetdc:baron.example.com`|Domain controller located|
+|External DNS Resolution|`Resolve-DnsName login.microsoftonline.com`|Resolution successful|
+|Backup Availability|`wbadmin get versions`|Backup versions identified|
 
 > These checks were intended to identify existing directory health, replication, DNS or backup issues before introducing cloud identity synchronisation.
 
