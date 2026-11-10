@@ -66,6 +66,8 @@ The Azure subscription and resource group established during Phase 1 will be reu
 |Microsoft.HybridConnectivity|<i>Record registration status</i>|
 |Onboarding Permissions|<i>Record assigned Azure role and scope</i>|
 
+> The **Azure Connected Machine Onboarding** role provides permissions to register servers with Azure Arc without granting broader extension management access. Local administrator permissions are also required to install the agent on each Windows Server.
+
 <i>Resource Provider Registration screenshot</i>
 
 ### Server Health and Connectivity
@@ -110,7 +112,7 @@ Azure Arc onboarding will use the Azure portal's Onboard existing machines workf
 ### MGMT01 Onboarding
 `MGMT01` was onboarded first to validate the agent and its connectivity without changing the file server.
 
-Following execution of the portal-generated script in an elevated Windows PowerShell session, the agent and its services was inspected using:
+Following execution of the portal-generated script in an elevated Windows PowerShell session, the agent and its services were inspected using:
 
 ```powershell
 $ArcAgent = "$env:ProgramFiles\AzureConnectedMachineAgent\azcmagent.exe"
@@ -216,7 +218,7 @@ The local Connected Machine agent can be inspected using:
 ### Azure Resource Graph Inventory
 Azure Resource Graph will be used to query Arc machine metadata and confirm that the registered servers can be identified using Kusto Query Language (KQL).
 
-```powershell
+```kusto
 Resources
 | where type =~ 'microsoft.hybridcompute/machines'
 | project
@@ -260,6 +262,8 @@ Key considerations include:
 - Keeping onboarding scripts, credentials and diagnostic archives out of the public repository.
 - Reviewing agent health and software maintenance requirements.
 - Deferring optional extensions and paid management features until their costs and permissions have been evaluated.
+
+> Although Azure RBAC does not automatically grant local Windows access, roles that permit extension deployment can enable privileged operations on Arc-enabled servers. Management permissions should therefore be restricted to appropriately authorised administrators.
 
 ### Cost Management
 The core Azure Arc-enabled Servers control plane does not introduce an additional per-server onboarding charge. Optional services such as Azure Monitor, security features and some patch-management capabilities can incur charges.
