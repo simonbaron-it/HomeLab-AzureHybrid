@@ -64,7 +64,7 @@ The Azure subscription and resource group established during Phase 1 will be reu
 |Microsoft.HybridCompute|<i>Record registration status</i>|
 |Microsoft.GuestConfiguration|<i>Record registration status</i>|
 |Microsoft.HybridConnectivity|<i>Record registration status</i>|
-|Onboarding Permissions|<i>Record assigned Azure role and scope</i>|
+|Onboarding Permissions|Azure Connected Machine Onboarding|
 
 > The **Azure Connected Machine Onboarding** role provides permissions to register servers with Azure Arc without granting broader extension management access. Local administrator permissions are also required to install the agent on each Windows Server.
 
