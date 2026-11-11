@@ -275,7 +275,7 @@ Key considerations include:
 ### Cost Management
 The core Azure Arc-enabled Servers control plane does not introduce an additional per-server onboarding charge. Optional services such as Azure Monitor, security features and some patch-management capabilities can incur charges.
 
-The £20 monthly budget established during Phase 1, with email notifications at 50%, 80% and 100%, will remain in place. The phase will reuse existing on-premises servers and should not require an additional Azure VM or VPN Gateway.
+The £20 monthly budget established during Phase 1, with email notifications at 50%, 80% and 100%, remains in place. The phase reused existing on-premises servers and did not require an additional Azure VM or VPN Gateway.
 
 ## Phase 3 Summary
 - **Hybrid Server Management:** Successfully onboarded `MGMT01` and `FS01`, with both machines reporting a Connected status in Azure. 
