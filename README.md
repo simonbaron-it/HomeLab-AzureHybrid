@@ -25,7 +25,7 @@ The project introduces Azure infrastructure and hybrid management while retainin
 |Phase|Engineering Focus|Status|
 |---|---|---|
 |01 - Azure Foundation|Resource governance, networking, NSGs, VM deployment and secure administration|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
-|02 - Hybrid Identity|Entra Cloud Sync, pilot users/groups and password sync|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
+|02 - Hybrid Identity|Entra Cloud Sync, pilot users/groups, password synchronisation and identity lifecycle testing|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
 |03 - Hybrid Management|Onboard `FS01` and `MGMT01` to Azure Arc|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
 |04 - Monitoring|Log Analytics, Data Collection Rules, KQL and alert testing|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
 |05 - Hybrid Storage|Azure Files, File Sync and synchronisation diagnostics|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
