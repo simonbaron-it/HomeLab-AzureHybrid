@@ -1,7 +1,7 @@
 # Hybrid Management
 > This documentation covers the integration of the existing on-premises Windows Server infrastructure with Microsoft Azure using Azure Arc-enabled Servers.
 >
-> The implementation focuses on hybrid server onboarding, centralised inventory, resource governance, agent management, connectivity validation and troubleshooting.
+> The implementation focuses on hybrid server onboarding, centralised inventory, resource governance, agent management and connectivity validation.
 
 ## Scenario and Objectives
 ### Business Scenario
@@ -15,7 +15,6 @@ As the organisation adopts Azure, it requires centralised visibility of infrastr
 - Validate Azure Arc connectivity, server inventory and agent health.
 - Apply resource tags and review role-based access control (RBAC).
 - Explore Azure Arc extensions, agent configuration and Resource Graph queries.
-- Test agent connectivity failure, troubleshooting and recovery.
 - Verify that existing management, identity synchronisation and file services remain operational.
 
 ## Scope
@@ -46,7 +45,7 @@ Each server will communicate with Azure Arc over outbound HTTPS through the exis
 ### Hybrid Management Architecture
 The hybrid management design uses the Azure Connected Machine agent to provide a management-plane connection between on-premises servers and Azure Arc. Each onboarded machine is represented as a separate Azure resource, allowing its properties, connection status, tags, access permissions and supported extensions to be managed through Azure.
 
-<i>Insert architecture diagram</i>
+<img src="../Images/Azure%20Arc%20Hybrid%20Management%20Diagram.png" width="1000"/>
 
 > **Deployment Decision:** The existing `MGMT01` server hosts Windows Admin Center, Windows Event Forwarding and the Microsoft Entra Cloud Sync provisioning agent deployed during Phase 2.
 >
@@ -58,17 +57,17 @@ The Azure subscription and resource group established during Phase 1 will be reu
 
 |Requirement|Configuration|
 |---|---|
-|Subscription|Existing `Azure Plan` subscription|
+|Subscription|`Baron Lab Subscription`|
 |Resource Group|`rg-hybridlab-swc-01`|
 |Region|`Sweden Central`|
-|Microsoft.HybridCompute|<i>Record registration status</i>|
-|Microsoft.GuestConfiguration|<i>Record registration status</i>|
-|Microsoft.HybridConnectivity|<i>Record registration status</i>|
+|Microsoft.HybridCompute|`Registered`|
+|Microsoft.GuestConfiguration|`Registered`|
+|Microsoft.HybridConnectivity|`Registered`|
 |Onboarding Permissions|`Azure Connected Machine Onboarding`|
 
-> The **Azure Connected Machine Onboarding** role provides permissions to register servers with Azure Arc without granting broader extension management access. Local administrator permissions are also required to install the agent on each Windows Server.
+> The `Azure Connected Machine Onboarding` role in `rg-hybridlab-swc-01` provides permissions to register servers in this resource group with Azure Arc, without granting broader extension management access. Local administrator permissions are also required to install the agent on each Windows Server.
 
-<i>Resource Provider Registration screenshot</i>
+<img src="../Images/Azure%20Resource%20Providers.png" width="1000"/>
 
 ### Server Health and Connectivity
 Before installing the Connected Machine agent, both servers will be checked for network connectivity, external DNS resolution and normal operation of existing Windows services.
@@ -85,10 +84,10 @@ Test-NetConnection management.azure.com -Port 443
 
 |Validation|MGMT01|FS01|
 |---|---|---|
-|Domain and network configuration|||
-|External DNS resolution|||
-|Outbound HTTPS connectivity|||
-|Existing services functioning|||
+|Domain and network configuration|`Pass`|`Pass`|
+|External DNS resolution|`Pass`|`Pass`|
+|Outbound HTTPS connectivity|`Pass`|`Pass`|
+|Existing services functioning|`Pass`|`Pass`|
 
 > These checks provide an initial connectivity baseline. Following agent installation, azcmagent check will validate the Azure Arc-specific service endpoints. No inbound port forwarding is required for standard Arc onboarding.
 
@@ -107,20 +106,15 @@ Azure Arc onboarding will use the Azure portal's Onboard existing machines workf
 |Connectivity Method|Public endpoint — outbound HTTPS|
 |Onboarding Targets|`MGMT01`, `FS01`|
 
-<i>Azure Arc onboarding wizard screenshot</i>
-
 ### MGMT01 Onboarding
 `MGMT01` was onboarded first to validate the agent and its connectivity without changing the file server.
 
-Following execution of the portal-generated script in an elevated Windows PowerShell session, the agent and its services were inspected using:
+Following execution of the portal-generated script in an elevated Windows PowerShell session, the agent services were inspected using:
 
 ```powershell
-$ArcAgent = "$env:ProgramFiles\AzureConnectedMachineAgent\azcmagent.exe"
-
-Get-Service himds, GCArcService, ExtensionService
-& $ArcAgent show
-& $ArcAgent version
-& $ArcAgent check
+Get-Service -Name `
+     himds, GCArcService, ExtensionService |
+     Format-Table Name, DisplayName, Status, StartType
 ```
 
 |Component|Configuration|
@@ -128,14 +122,12 @@ Get-Service himds, GCArcService, ExtensionService
 |Server|`MGMT01`|
 |Operating System|`Windows Server 2025`|
 |Existing Roles|`Windows Admin Center`, `Windows Event Forwarding`, `Entra Cloud Sync`|
-|Connected Machine Agent Version||
-|Azure Arc Connection Status||
-|Endpoint Connectivity Check||
-|Existing Service Health||
+|Connected Machine Agent Version|`1.70.03595.3521`|
+|Azure Arc Connection Status|`Connected` — Successfully registered with Azure Arc and reporting to Azure|
+|Endpoint Connectivity Check|`Passed` — Required Azure Arc endpoints reachable|
+|Existing Service Health|`Healthy` — Existing services operational following onboarding|
 
-<i>Screenshot - MGMT01 registered and connected in Azure Arc</i>
-
-<i>Screenshot - MGMT01 agent and service health verification</i>
+<img src="../Images/Azure%20Arc%20Services%20PowerShell%20-%20MGMT01.png" width="1000"/>
 
 ### FS01 Onboarding
 `FS01` was then onboarded using the same subscription, resource group and region. The original SMB shares and server services were checked before and after installation.
@@ -144,11 +136,6 @@ Get-Service himds, GCArcService, ExtensionService
 # Pre- and post-installation file-service checks
 Get-Service LanmanServer
 Get-SmbShare | Select-Object Name, Path, Description
-
-# Azure Arc agent checks after installation
-$ArcAgent = "$env:ProgramFiles\AzureConnectedMachineAgent\azcmagent.exe"
-& $ArcAgent show
-& $ArcAgent check
 ```
 
 |Component|Configuration|
@@ -156,24 +143,19 @@ $ArcAgent = "$env:ProgramFiles\AzureConnectedMachineAgent\azcmagent.exe"
 |Server|`FS01`|
 |Operating System|`Windows Server 2025`|
 |Existing Role|`Windows File Services`|
-|Connected Machine Agent Version||
-|Azure Arc Connection Status||
-|Endpoint Connectivity Check||
-|SMB Share Access||
+|Connected Machine Agent Version|`1.70.03595.3521`|
+|Azure Arc Connection Status|`Connected` — Successfully registered with Azure Arc and reporting to Azure|
+|Endpoint Connectivity Check|`Passed` — Required Azure Arc endpoints reachable|
+|SMB Share Access|`Healthy` — Existing share accessible following onboarding|
 
-<i>Screenshot - FS01 registered and connected in Azure Arc</i>
+<img src="../Images/Azure%20Arc%20Services%20PowerShell%20-%20FS01.png" width="1000"/>
 
 ## Hybrid Inventory and Governance
 
 ### Arc Machine Inventory
 The Azure Arc Machines page was used to confirm that both servers appear as independent Azure resources with the expected properties and connection status.
 
-|Machine|Role|Arc Status|Agent Version|
-|---|---|---|---|
-|`MGMT01`|Management/Cloud Sync|||
-|`FS01`|File Services|||
-
-<i>Screenshot — Azure Arc machine inventory showing both servers</i>
+<img src="../Images/Azure%20Arc%20Server%20Connections.png" width="1000"/>
 
 ### Resource Tagging
 The Phase 1 tagging convention will be retained, with additional tags to identify on-premises hosting and server roles.
@@ -188,8 +170,6 @@ The Phase 1 tagging convention will be retained, with additional tags to identif
 |`Hosting`|`OnPremises`|`OnPremises`|
 |`ServerRole`|`Management`|`FileServices`|
 
-<i>Screenshot — Azure Arc resource tags?</i>
-
 ### Role-Based Access Control
 Azure RBAC assignments were reviewed to demonstrate how management access to Arc-enabled resources can be restricted. A non-privileged pilot identity from Phase 2 was granted the Reader role at the appropriate scope for a controlled test.
 
@@ -199,21 +179,10 @@ Azure RBAC assignments were reviewed to demonstrate how management access to Arc
 |Modify Arc machine resources|Denied for Reader|
 |Access local Windows or SMB services|Not granted through Azure Reader|
 
-> Azure RBAC on an Arc resource does not provide local Windows administrator rights, interactive logon rights or access to `FS01` shares.
->
-> <i>Screenshot — RBAC assignment or access test?</i>
+#### Access Control Test
+> The `jtaylor` account was assigned the `Reader` role for the `rg-hybridlab-swc-01` resource group. I then signed in with this account to verify Azure Arc resource couldn't be modified.
 
-### Extensions and Agent Management
-The Azure Arc Extensions page was reviewed to identify supported management capabilities. Azure Monitor Agent deployment will be deferred until Phase 4 so that its Log Analytics and Data Collection Rule configuration can be documented together.
-
-The local Connected Machine agent can be inspected using:
-```powershell
-& $ArcAgent show
-& $ArcAgent version
-& $ArcAgent config list
-```
-
-<i>Arc machine extensions and agent management options screenshot</i>
+<img src="../Images/Azure%20Role%20-%20Access%20Denied.png" width="1000"/>
 
 ### Azure Resource Graph Inventory
 Azure Resource Graph will be used to query Arc machine metadata and confirm that the registered servers can be identified using Kusto Query Language (KQL).
@@ -231,9 +200,11 @@ Resources
 | order by name asc
 ```
 
-<i>Resource Graph query and results.</i>
+<img src="../Images/Resource%20Graph%20Explorer.png" width="1000"/>
 
-## Agent Connectivity Validation and Testing
+> The Azure Arc Extensions page was reviewed to identify supported management capabilities. Azure Monitor Agent deployment will be deferred until Phase 4 so that its Log Analytics and Data Collection Rule configuration can be documented together.
+
+## Agent Connectivity Validation
 
 |Test|Action|Result|
 |---|---|---|
@@ -244,10 +215,6 @@ Resources
 |FS01 Services|Check SMB shares and client access|Existing functions retained|
 |Resource Governance|Review tags and RBAC|Correct metadata and permissions|
 |Resource Graph|Query Arc-enabled machines|Both machines listed|
-|Agent Failure|Stop `himds` on MGMT01|Azure eventually reports disconnection|
-|Agent Recovery|Start `himds` on MGMT01|Azure returns to Connected|
-
-### Agent Connectivity Failure and Recovery??
 
 ## Security and Operational Considerations
 
@@ -274,8 +241,7 @@ The £20 monthly budget established during Phase 1, with email notifications at 
 - **Hybrid Server Management:** Summarise onboarding of MGMT01 and FS01 and their final connection statuses.   
 - **Azure Arc Deployment:** Record agent versions, installation results and configuration decisions.   
 - **Resource Governance:** Summarise machine inventory, resource tagging and RBAC validation.   
-- **Operational Validation:** Record verification of existing MGMT01 and FS01 services.   
-- **Troubleshooting:** Summarise the agent outage simulation, investigation and recovery.   
+- **Operational Validation:** Record verification of existing MGMT01 and FS01 services.     
 - **Security and Cost:** Document the final controls, observed charges and deferred features.   
 
 ## Next Steps
