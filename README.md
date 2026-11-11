@@ -25,8 +25,8 @@ The project introduces Azure infrastructure and hybrid management while retainin
 |Phase|Engineering Focus|Status|
 |---|---|---|
 |01 - Azure Foundation|Resource governance, networking, NSGs, VM deployment and secure administration|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
-|02 - Hybrid Identity|Entra Cloud Sync, pilot users/groups, password sync and troubleshooting|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
-|03 - Hybrid Management|Onboard `FS01` and `MGMT01` to Azure Arc|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|02 - Hybrid Identity|Entra Cloud Sync, pilot users/groups, password sync and troubleshooting|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
+|03 - Hybrid Management|Onboard `FS01` and `MGMT01` to Azure Arc|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
 |04 - Monitoring|Log Analytics, Data Collection Rules, KQL and alert testing|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
 |05 - Hybrid Storage|Azure Files, File Sync and synchronisation diagnostics|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
 |06 - Operations|Update Manager, Azure VM backup and file-level recovery|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
@@ -39,8 +39,8 @@ The build will be documented as a series of practical engineering guides, listed
 |Area|Documentation|
 |---|---|
 |Azure Foundation|[Azure Foundation & Infrastructure Deployment](Documentation/01%20Azure%20Foundation.md)|
-|Hybrid Identity|![In Progress](https://img.shields.io/badge/Status-In%20Progress-yellow)|
-|Azure Arc|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Hybrid Identity|[AD & Entra ID - Entra Cloud Sync](Documentation/02%20Hybrid%20Identity.md)|
+|Azure Arc|![In Progress](https://img.shields.io/badge/Status-In%20Progress-yellow)|
 |Monitoring|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |File Services|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Patching and Recovery|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
