@@ -122,7 +122,7 @@ Before installation, server performance, Active Directory connectivity and outbo
 |Additional Component|`Microsoft Entra Cloud Sync Provisioning Agent`|
 |Agent Version|`1.1.2507.0`|
 |Connected AD Domain|`baron.example.com`|
-|Service Account|`Group Managed Service Account` (gMSA)|
+|Service Account|`Group Managed Service Account (gMSA)`|
 |Agent Status|`Active`|
 
 The provisioning agent was registered with the existing Microsoft Entra tenant and configured to communicate with the on-premises Active Directory domain using a group Managed Service Account (gMSA).
@@ -176,10 +176,10 @@ A series of tests were performed to confirm that user lifecycle changes originat
 |Test|Action|Outcome|
 |---|---|---|
 |Cloud Authentication|Signed in to work or school account `amorgan`|Successful cloud sign-in|
-|New User Provisioning|Created pilot user `creed` in AD.|Successfully provisioned in Entra ID|
-|Attribute Synchronisation|Updated `jtaylor` AD attributes.|Changes synchronised in Entra ID|
-|Password Hash Synchronisation|Changed password for `amorgan` in AD.|Successful cloud sign-in with new password|
-|Group Membership Updates|Added `creed` to security group|Membership synchronised in Entra ID|
+|New User Provisioning|Created pilot user `creed` in AD|Successfully provisioned in Entra ID|
+|Attribute Synchronisation|Updated `jtaylor` AD attributes|Changes synchronised in Entra ID|
+|Password Hash Synchronisation|Changed password for `amorgan` in AD|Successful cloud sign-in with new password|
+|Group Membership Updates|Added `creed` to security group `CloudSync-Operations`|Membership synchronised in Entra ID|
 |Account Disablement|Disabled `scarter` in AD|Cloud account disabled|
 
 ### New User Provisioning
