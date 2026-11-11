@@ -14,7 +14,7 @@ As the organisation adopts Azure, it requires centralised visibility of infrastr
 - Onboard `MGMT01` and `FS01` using the Azure Connected Machine agent.
 - Validate Azure Arc connectivity, server inventory and agent health.
 - Apply resource tags and review role-based access control (RBAC).
-- Review available Azure Arc extensions and query connected machine inventory using Azure Resource Graph..
+- Review available Azure Arc extensions and query connected machine inventory using Azure Resource Graph.
 - Verify that existing management, identity synchronisation and file services remain operational.
 
 ## Scope
@@ -53,7 +53,7 @@ The hybrid management design uses the Azure Connected Machine agent to provide a
 
 ## Azure Arc Preparation
 ### Resource Providers and Permissions
-The Azure subscription and resource group established during Phase 1 will be reused. The required resource providers and permissions were reviewed before generating the onboarding script.
+The Azure subscription and resource group established during Phase 1 were reused. The required resource providers and permissions were reviewed before generating the onboarding script.
 
 |Requirement|Configuration|
 |---|---|
@@ -89,7 +89,7 @@ Test-NetConnection management.azure.com -Port 443
 |Outbound HTTPS connectivity|`Pass`|`Pass`|
 |Existing services functioning|`Pass`|`Pass`|
 
-> These checks provide an initial connectivity baseline. Following agent installation, azcmagent check will validate the Azure Arc-specific service endpoints. No inbound port forwarding is required for standard Arc onboarding.
+> These checks provide an initial connectivity baseline. Following agent installation, azcmagent check validated the Azure Arc-specific service endpoints. No inbound port forwarding is required for standard Arc onboarding.
 
 ## Azure Arc Agent Deployment
 
@@ -215,6 +215,10 @@ Resources
 |FS01 Services|Check SMB shares and client access|Existing functions retained|
 |Resource Governance|Review tags and RBAC|Correct metadata and permissions|
 |Resource Graph|Query Arc-enabled machines|Both machines listed|
+
+azcmagent checks
+
+existing services?
 
 ## Security and Operational Considerations
 
