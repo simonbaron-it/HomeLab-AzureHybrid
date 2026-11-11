@@ -14,13 +14,13 @@ As the organisation adopts Azure, it requires centralised visibility of infrastr
 - Onboard `MGMT01` and `FS01` using the Azure Connected Machine agent.
 - Validate Azure Arc connectivity, server inventory and agent health.
 - Apply resource tags and review role-based access control (RBAC).
-- Explore Azure Arc extensions, agent configuration and Resource Graph queries.
+- Review available Azure Arc extensions and query connected machine inventory using Azure Resource Graph..
 - Verify that existing management, identity synchronisation and file services remain operational.
 
 ## Scope
 Phase 3 introduces Azure Arc-enabled Servers for two existing on-premises Windows Server 2025 virtual machines: `MGMT01` and `FS01`.
 
-Each server will communicate with Azure Arc over outbound HTTPS through the existing lab routing and Hyper-V NAT configuration. The servers retain their existing Active Directory membership, IP addresses and roles.
+Each server communicates with Azure Arc over outbound HTTPS through the existing lab routing and Hyper-V NAT configuration. The servers retain their existing Active Directory membership, IP addresses and roles.
 > No site-to-site VPN, Azure VM domain join or migration of on-premises workloads is required. Domain controllers `DC01` and `DC02` will not be onboarded during this phase.
 >
 > Azure Monitor Agent, Log Analytics, Data Collection Rules and alerting will be introduced in Phase 4: Monitoring, rather than deployed as part of this implementation.
@@ -49,11 +49,11 @@ The hybrid management design uses the Azure Connected Machine agent to provide a
 
 > **Deployment Decision:** The existing `MGMT01` server hosts Windows Admin Center, Windows Event Forwarding and the Microsoft Entra Cloud Sync provisioning agent deployed during Phase 2.
 >
-> Azure Arc will also be installed on `MGMT01` to reuse the existing Hyper-V resources, with server health and existing services checked before and after onboarding. `FS01` will be onboarded separately to demonstrate management of an operational file server.
+> Azure Arc was also installed on `MGMT01` to reuse the existing Hyper-V resources, with server health and existing services checked before and after onboarding. `FS01` was onboarded separately to demonstrate management of an operational file server.
 
 ## Azure Arc Preparation
 ### Resource Providers and Permissions
-The Azure subscription and resource group established during Phase 1 will be reused. The required resource providers and permissions will be reviewed before generating the onboarding script.
+The Azure subscription and resource group established during Phase 1 will be reused. The required resource providers and permissions were reviewed before generating the onboarding script.
 
 |Requirement|Configuration|
 |---|---|
@@ -70,7 +70,7 @@ The Azure subscription and resource group established during Phase 1 will be reu
 <img src="../Images/Azure%20Resource%20Providers.png" width="1000"/>
 
 ### Server Health and Connectivity
-Before installing the Connected Machine agent, both servers will be checked for network connectivity, external DNS resolution and normal operation of existing Windows services.
+Before installing the Connected Machine agent, both servers were checked for network connectivity, external DNS resolution and normal operation of existing Windows services.
 
 ```powershell
 Get-NetIPConfiguration
@@ -94,7 +94,7 @@ Test-NetConnection management.azure.com -Port 443
 ## Azure Arc Agent Deployment
 
 ### Onboarding Configuration
-Azure Arc onboarding will use the Azure portal's Onboard existing machines workflow. A Windows PowerShell installation script will be generated using the following configuration:
+Azure Arc onboarding used the Azure portal's `Onboard existing machines` workflow. A Windows PowerShell installation script was generated using the following configuration:
 
 |Setting|Configuration|
 |---|---|
@@ -158,7 +158,7 @@ The Azure Arc Machines page was used to confirm that both servers appear as inde
 <img src="../Images/Azure%20Arc%20Server%20Connections.png" width="1000"/>
 
 ### Resource Tagging
-The Phase 1 tagging convention will be retained, with additional tags to identify on-premises hosting and server roles.
+The Phase 1 tagging convention was retained, with additional tags to identify on-premises hosting and server roles.
 
 |Tag|MGMT01|FS01|
 |---|---|---|
@@ -180,12 +180,12 @@ Azure RBAC assignments were reviewed to demonstrate how management access to Arc
 |Access local Windows or SMB services|Not granted through Azure Reader|
 
 #### Access Control Test
-> The `jtaylor` account was assigned the `Reader` role for the `rg-hybridlab-swc-01` resource group. I then signed in with this account to verify Azure Arc resource couldn't be modified.
+> The pilot account `jtaylor` was assigned the Reader role at resource-group scope. After signing in with this account, an attempt to modify the tags on the `MGMT01` Azure Arc resource failed with an `AuthorizationFailed` error, confirming that the assigned role did not permit this operation.
 
 <img src="../Images/Azure%20Role%20-%20Access%20Denied.png" width="1000"/>
 
 ### Azure Resource Graph Inventory
-Azure Resource Graph will be used to query Arc machine metadata and confirm that the registered servers can be identified using Kusto Query Language (KQL).
+Azure Resource Graph was used to query Arc machine metadata and confirm that the registered servers can be identified using Kusto Query Language (KQL).
 
 ```kusto
 Resources
@@ -238,11 +238,12 @@ The core Azure Arc-enabled Servers control plane does not introduce an additiona
 The £20 monthly budget established during Phase 1, with email notifications at 50%, 80% and 100%, will remain in place. The phase will reuse existing on-premises servers and should not require an additional Azure VM or VPN Gateway.
 
 ## Phase 3 Summary
-- **Hybrid Server Management:** Summarise onboarding of MGMT01 and FS01 and their final connection statuses.   
-- **Azure Arc Deployment:** Record agent versions, installation results and configuration decisions.   
-- **Resource Governance:** Summarise machine inventory, resource tagging and RBAC validation.   
-- **Operational Validation:** Record verification of existing MGMT01 and FS01 services.     
-- **Security and Cost:** Document the final controls, observed charges and deferred features.   
+- **Hybrid Server Management:** Successfully onboarded `MGMT01` and `FS01`, with both machines reporting a Connected status in Azure. 
+- **Azure Arc Deployment:** Installed the Azure Connected Machine agent, version `1.70.03595.3521`, on both servers and verified that the agent services were running. 
+- **Resource Governance:** Applied the existing lab tagging convention, reviewed Azure RBAC permissions and validated read-only access restrictions using a pilot identity.
+- **Infrastructure Inventory:** Used Azure Resource Graph and KQL to retrieve both Arc-enabled servers, including their connection status, resource group and assigned server roles.
+- **Operational Validation:** Confirmed that existing management, identity synchronisation and file services remained operational following onboarding. 
+- **Security and Cost:** Retained outbound-only Azure Arc connectivity and deferred additional monitoring and management services to later project phases. 
 
 ## Next Steps
 Phase 4: Monitoring will extend the hybrid management configuration by implementing Azure Monitor, a Log Analytics workspace, Azure Monitor Agent, Data Collection Rules, Kusto Query Language (KQL) queries and operational alerts.
