@@ -148,7 +148,7 @@ A new **AD to Microsoft Entra ID sync** configuration was created using the regi
 |Accidental Deletion Protection|`Enabled`|
 |Accidental Deletion Threshold|`2 objects`|
 
-> Synchronisation was restricted to the pilot OU rather than the entire Active Directory environment.
+> Synchronisation was restricted to the pilot OU rather than the entire Active Directory environment. Accidental-deletion protection was configured with a threshold of two objects to provide safeguards appropriate to the small pilot environment.
 >
 > Default attribute mappings were reviewed, including `userPrincipalName`, `displayName`, `givenName`, `sn`, `department` and `title`.
 
@@ -183,24 +183,24 @@ A series of tests were performed to confirm that user lifecycle changes originat
 |Account Disablement|Disabled `scarter` in AD|Cloud account disabled|
 
 ### New User Provisioning
-New user `creed` was created in AD. The provisioned account was validated in Entra ID.
+> New user `creed` was created in AD. The provisioned account was validated in Entra ID.
 
-<i>Screenshot</i>
+<img src="../Images/User%20Provisioning%20Validation.png" width="1000"/>
 
 ### Attribute Synchronisation
-The `Job Title` and `Department` AD attributes were updated for the account `jtaylor`. These changes were validated in Entra ID.
+> The `Job Title` and `Department` AD attributes were updated for the account `jtaylor`. These changes were validated in Entra ID.
 
-<i>Screenshot</i>
+<img src="../Images/Attribute%20Editing%20Validation.png" width="1000"/>
 
 ### Group Membership Updates
-User `creed` was added to the AD security group `CloudSync-Operations`. The group was inspected in Entra ID to validate membership updates.
+> User `creed` was added to the AD security group `CloudSync-Operations`. The group was inspected in Entra ID to validate membership updates.
 
-<i>Screenshot</i>
+<img src="../Images/Group%20Membership%20Validation.png" width="1000"/>
 
 ### Account Disablement
-The AD account `scarter` was disabled. Entra ID was inspected to verify the cloud account had been disabled.
+> The AD account `scarter` was disabled. Entra ID was inspected to verify the cloud account had been disabled.
 
-<i>Screenshot</i>
+<img src="../Images/Account%20Disable%20Validation.png" width="1000"/>
 
 ## Security and Operational Considerations
 ### Identity Security
@@ -225,7 +225,7 @@ Phase 2 established hybrid identity synchronisation between the existing on-prem
 
 - **Hybrid Identity:** Verified the `simonbaron.co.uk` domain and configured an alternative Active Directory UPN suffix for cloud sign-in.
 - **Cloud Sync Deployment:** Installed and registered the Microsoft Entra provisioning agent on MGMT01, using a group Managed Service Account.
-- **Identity Synchronisation:** Successfully synchronised three pilot users and two security groups from the `CloudSync-Pilot` OU.
+- **Identity Synchronisation:** Initially synchronised three pilot users and two security groups from the `CloudSync-Pilot` OU, with an additional user provisioned during lifecycle testing.
 - **Identity Lifecycle:** Validated user provisioning, attribute changes, password hash synchronisation, group membership updates and account disablement.
 - **Security:** Restricted synchronisation scope, excluded privileged AD identities and enabled accidental-deletion protection.
 
