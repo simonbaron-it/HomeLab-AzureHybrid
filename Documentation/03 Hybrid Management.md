@@ -89,7 +89,7 @@ Test-NetConnection management.azure.com -Port 443
 |Outbound HTTPS connectivity|`Pass`|`Pass`|
 |Existing services functioning|`Pass`|`Pass`|
 
-> These checks provide an initial connectivity baseline. Following agent installation, azcmagent check validated the Azure Arc-specific service endpoints. No inbound port forwarding is required for standard Arc onboarding.
+> These checks provide an initial connectivity baseline. Following agent installation, `azcmagent` checks validated the Azure Arc-specific service endpoints. No inbound port forwarding is required for standard Arc onboarding.
 
 ## Azure Arc Agent Deployment
 
@@ -216,9 +216,9 @@ Resources
 |Resource Governance|Review tags and RBAC|Correct metadata and permissions|
 |Resource Graph|Query Arc-enabled machines|Both machines listed|
 
-azcmagent checks
+<i>azcmagent checks</i>
 
-existing services?
+<i>existing services</i>
 
 ## Security and Operational Considerations
 
