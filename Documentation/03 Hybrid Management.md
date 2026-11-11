@@ -145,7 +145,8 @@ Get-SmbShare | Select-Object Name, Path, Description
 |Endpoint Connectivity Check|`Passed` — Required Azure Arc endpoints reachable|
 |SMB Share Access|`Healthy` — Existing share accessible following onboarding|
 
-> Services were checked on both `MGMT01` and `FS01` using PowerShell
+Services were checked on both `MGMT01` and `FS01` using PowerShell. Both servers confirmed the following output.
+
 <img src="../Images/Azure%20Arc%20Services%20PowerShell%20-%20FS01.png" width="1000"/>
 
 ## Hybrid Inventory and Governance
@@ -215,11 +216,11 @@ Resources
 |Resource Graph|Query Arc-enabled machines|Both machines listed|
 
 ### Agent Health
-PowerShell was used on both `MGMT01` and `FS01` to verify agent health.
+PowerShell was used on both `MGMT01` and `FS01` to verify agent health. Both servers confirmed the following output.
 
 <img src="../Images/ArcAgent%20Check.png" width="1000"/>
 
-PowerShell was also used on both servers to verify existing service health.
+PowerShell was also used on both servers to verify existing services were running.
 
 > #### MGMT01
 
