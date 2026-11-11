@@ -143,7 +143,7 @@ Get-SmbShare | Select-Object Name, Path, Description
 |Connected Machine Agent Version|`1.70.03595.3521`|
 |Azure Arc Connection Status|`Connected` — Successfully registered with Azure Arc and reporting to Azure|
 |Endpoint Connectivity Check|`Passed` — Required Azure Arc endpoints reachable|
-|SMB Share Access|`Healthy` — Existing share accessible following onboarding|
+|SMB Share Access|`Healthy` — LanmanServer running and existing SMB shares listed|
 
 Services were checked on both `MGMT01` and `FS01` using PowerShell. Both servers confirmed the following output.
 
@@ -211,7 +211,7 @@ Resources
 |FS01 Onboarding|Register with Azure Arc|Connected resource visible|
 |Agent Health|Run `azcmagent show` and `azcmagent check`|Healthy status and required endpoint access|
 |MGMT01 Services|Check WAC, WEF and Cloud Sync|Existing functions retained|
-|FS01 Services|Check SMB shares and client access|Existing functions retained|
+|FS01 Services|Check LanmanServer status and SMB share configuration|Existing functions retained|
 |Resource Governance|Review tags and RBAC|Correct metadata and permissions|
 |Resource Graph|Query Arc-enabled machines|Both machines listed|
 
