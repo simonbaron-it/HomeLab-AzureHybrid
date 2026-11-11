@@ -37,7 +37,6 @@ Each server communicates with Azure Arc over outbound HTTPS through the existing
 |Microsoft Entra Tenant|`Baron Hybrid Home Lab`|
 |Azure Region|`Sweden Central`|
 |Resource Group|`rg-hybridlab-swc-01`|
-|Existing Azure VM|`AZ-LAB01` — `Not an Arc onboarding target`|
 |Hybrid Management Service|`Azure Arc-enabled Servers`|
 |Onboarding Targets|`MGMT01`, `FS01`|
 |Connectivity|`Outbound HTTPS` - `TCP 443`|
@@ -127,8 +126,6 @@ Get-Service -Name `
 |Endpoint Connectivity Check|`Passed` — Required Azure Arc endpoints reachable|
 |Existing Service Health|`Healthy` — Existing services operational following onboarding|
 
-<img src="../Images/Azure%20Arc%20Services%20PowerShell%20-%20MGMT01.png" width="1000"/>
-
 ### FS01 Onboarding
 `FS01` was then onboarded using the same subscription, resource group and region. The original SMB shares and server services were checked before and after installation.
 
@@ -148,6 +145,7 @@ Get-SmbShare | Select-Object Name, Path, Description
 |Endpoint Connectivity Check|`Passed` — Required Azure Arc endpoints reachable|
 |SMB Share Access|`Healthy` — Existing share accessible following onboarding|
 
+> Services were checked on both `MGMT01` and `FS01` using PowerShell
 <img src="../Images/Azure%20Arc%20Services%20PowerShell%20-%20FS01.png" width="1000"/>
 
 ## Hybrid Inventory and Governance
@@ -216,9 +214,46 @@ Resources
 |Resource Governance|Review tags and RBAC|Correct metadata and permissions|
 |Resource Graph|Query Arc-enabled machines|Both machines listed|
 
-<i>azcmagent checks</i>
+### Agent Health
+PowerShell was used on both `MGMT01` and `FS01` to verify agent health.
 
-<i>existing services</i>
+<img src="../Images/ArcAgent%20Check.png" width="1000"/>
+
+PowerShell was also used on both servers to verify existing service health.
+
+> #### MGMT01
+
+```powershell
+# Windows Admin Center
+Get-Service | Where-Object {
+    $_.Name -match 'ServerManagementGateway|WindowsAdminCenter' -or
+    $_.DisplayName -match 'Windows Admin Center'
+} | Select-Object Name, DisplayName, Status
+
+# Windows Event Forwarding
+Get-Service Wecsvc
+
+# Microsoft Entra Cloud Sync
+Get-Service | Where-Object {
+    $_.DisplayName -like '*Azure AD Connect*'
+} | Select-Object Name, DisplayName, Status
+```
+
+> #### FS01
+```powershell
+Get-Service LanmanServer
+
+Get-SmbShare | Select-Object Name, Path, Description
+```
+
+|Server|Service|Status|
+|---|---|---|
+|`MGMT01`|`WindowsAdminCenter`|`Running`|
+|`MGMT01`|`WindowsAdminCenterAccountManagement`|`Running`|
+|`MGMT01`|`Wecsvc`|`Running`|
+|`MGMT01`|`AADConnectProvisioningAgent`|`Running`|
+|`MGMT01`|`AzureADConnectAgentUpdater`|`Running`|
+|`FS01`|`LanmanServer`|`Running`|
 
 ## Security and Operational Considerations
 
