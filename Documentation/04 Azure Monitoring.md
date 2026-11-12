@@ -127,3 +127,85 @@ Get-Counter -Counter @(
 <i>Screenshot</i>
 
 ## Azure Monitor Agent Deployment
+
+### Arc-Enabled Server Monitoring
+Azure Monitor Agent was deployed through the DCR resource associations. The extension `AzureMonitorWindowsAgent` and the associated DCR were verified for each Arc-enabled server.
+
+|Server|Azure Arc Status|AMA Extension|DCR Association|Data Reporting|
+|---|---|---|---|---|
+|`MGMT01`|Connected||||
+|`FS01`|Connected||||
+
+> The monitoring process and existing operational services were checked using PowerShell:
+
+```powershell
+# Verify Azure Monitor Agent activity.
+Get-Process -Name MonAgentCore -ErrorAction SilentlyContinue |
+    Select-Object ProcessName, Id, StartTime
+
+# Verify existing Windows Event Forwarding and Cloud Sync services on `MGMT01`.
+Get-Service Wecsvc, AADConnectProvisioningAgent, AzureADConnectAgentUpdater
+
+# Verify the file server service and existing shares on `FS01`.
+Get-Service LanmanServer
+Get-SmbShare | Select-Object Name, Path, Description
+```
+
+<i>Monitor Agent Extension screenshot</i>
+
+### Azure VM Monitoring
+`AZ-LAB01` was associated with the DCR only when it was running and able to reach the required Azure Monitor endpoints. Monitoring was checked through Azure VM extension status and workspace queries.
+
+|Setting|Configuration|
+|---|---|
+|VM|`AZ-LAB01`|
+|Temporary Private IP||
+|Monitoring Extension|`AzureMonitorWindowsAgent`|
+|Outbound Connectivity During Test||
+|VM Managed Identity Requirement||
+|Telemetry Validation||
+|Post-Test VM State|Deallocated after lab session|
+
+> No permanent inbound RDP access was introduced. Deallocation or loss of the VM's outbound connectivity is an expected reason for missing monitoring data and will not be treated as an unexpected service outage.
+
+## Log Analytics and KQL
+
+### Monitoring Data Validation
+### Heartbeat Monitoring
+### Windows Event Analysis
+### CPU Performance Monitoring
+### Memory and Disk Monitoring
+### Monitoring Data Volume
+
+## Azure Monitor Alerting
+
+### Action Group Configuration
+### Application Event Alert
+### Missing Heartbeat Alert
+
+## Controlled Monitoring Test?
+
+## Validation and Testing
+
+## Security and Operational Considerations
+
+### Monitoring Security
+### Cost Management
+
+## Phase 4 Summary
+- **Centralised Monitoring:** 
+- **Data Collection:** 
+- **KQL and Diagnostics:** 
+- **Alerting:** 
+- **Troubleshooting:** 
+- **Security and Cost:**
+
+## Next Steps
+**Phase 5:** Hybrid Storage will focus on extending selected `FS01` file services into Azure using Azure Files and Azure File Sync.
+
+The monitoring capabilities introduced in Phase 4 will provide a basis for investigating server health and operational events while hybrid file synchronisation is configured and validated.
+
+
+
+
+
