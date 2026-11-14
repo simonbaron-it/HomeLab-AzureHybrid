@@ -38,8 +38,8 @@ The existing Windows Admin Center, Windows Event Forwarding, Microsoft Entra Clo
 |Resource Group|`rg-hybridlab-swc-01`|
 |Existing Hybrid Management|`Azure Arc-enabled Servers`|
 |Monitoring Service|`Azure Monitor`|
-|Log Analytics Workspace||
-|Data Collection Rule||
+|Log Analytics Workspace|`law-hybridlab-swc-01`|
+|Data Collection Rule|`dcr-hybrid-windows-swc-01`|
 |Monitoring Agent|`Azure Monitor Agent`|
 |Data Collection|Windows events, performance counters and agent heartbeats|
 |Alert Notification|Email via Azure Monitor Action Group|
@@ -58,7 +58,7 @@ A Log Analytics workspace was deployed in the existing Azure resource group to s
 
 |Setting|Configuration|
 |---|---|
-|Workspace Name||
+|Workspace Name|`law-hybridlab-swc-01`|
 |Resource Group|`rg-hybridlab-swc-01`|
 |Region|`Sweden Central`|
 |Pricing Model||
