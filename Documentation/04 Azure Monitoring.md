@@ -41,13 +41,13 @@ The existing Windows Admin Center, Windows Event Forwarding, Microsoft Entra Clo
 |Log Analytics Workspace|`law-hybridlab-swc-01`|
 |Data Collection Rule|`dcr-hybrid-windows-swc-01`|
 |Monitoring Agent|`Azure Monitor Agent`|
-|Data Collection|Windows events, performance counters and agent heartbeats|
-|Alert Notification|Email via Azure Monitor Action Group|
+|Data Collection|`Windows events`, `performance counters`, `agent heartbeats`|
+|Alert Notification|`Email via Azure Monitor Action Group`|
 
 ## Monitoring Architecture
 Azure Monitor Agent collects selected operating-system events and performance data from the Azure Arc-enabled Windows servers and the Azure VM. A Data Collection Rule defines the collection scope and sends the data to a central Log Analytics workspace. KQL queries and Azure Monitor alert rules use the collected data for investigations and fault detection.
 
-<i>Architecture Diagram</i>
+<img src="../Images/Phase%204%20Azure%20Monitoring%20Architecture.png" width="1000"/>
 
 > **Deployment Decision:** `MGMT01` and `FS01` are the primary monitoring targets because they remain available through the existing on-premises environment and Azure Arc connectivity. `AZ-LAB01` only reports telemetry while running with a functional outbound Azure Monitor connection. This avoids false availability alerts and unnecessary Azure VM compute charges.
 
@@ -61,18 +61,16 @@ A Log Analytics workspace was deployed in the existing Azure resource group to s
 |Workspace Name|`law-hybridlab-swc-01`|
 |Resource Group|`rg-hybridlab-swc-01`|
 |Region|`Sweden Central`|
-|Pricing Model||
-|Data Retention||
-|Resource Tags|Existing Phase 1 tags|
-|Deployment Status||
+|Pricing Model|`Pay-as-you-go`|
+|Data Retention|`Default analytics retention`|
+|Resource Tags|`Existing phase 1 tags`|
+|Deployment Status|`Active`|
 
-<i>Screenshot</i>
+<img src="../Images/Log%20Analytics%20Workspace.png" width="1000"/>
 
 ### Data Retention and Cost Controls
 A limited monitoring scope is used for this lab, including appropriate retention settings, ingested data volume and estimated costs.
 > The £20 monthly budget configured in Phase 1, including alerts at £10, £16 and £20, remains in place. Log ingestion, retention beyond included allowances, and log-search alert rules may incur charges.
-
-<i>Data retention table?</i>
 
 ## Data Collection Rules
 
@@ -81,14 +79,16 @@ A Windows Data Collection Rule was created and associated with the Azure Arc-ena
 
 |Setting|Configuration|
 |---|---|
-|DCR Name||
+|DCR Name|`dcr-hybrid-windows-swc-01`|
 |Region|`Sweden Central`|
 |Platform Type|`Windows`|
 |Primary Targets|`MGMT01`, `FS01`|
 |Additional Test Target|`AZ-LAB01`|
-|Destination||
-|Data Sources|Windows Event Logs and Performance Counters|
-|DCR Association Status||
+|Destination|`law-hybridlab-swc-01`|
+|Data Sources|`Windows Event Logs`, `Performance Counters`|
+|DCR Association Status|`Passed initial checks`|
+
+<img src="../Images/Data%20Collection%20Rule%20-%20Resources.png" width="1000"/>
 
 ### Windows Event Collection
 Selected System and Application events were collected to support investigation of operational faults, without ingesting unnecessary informational or forwarded events.
@@ -99,12 +99,6 @@ Selected System and Application events were collected to support investigation o
 |`Application`|`Critical`, `Error`, `Warning`|Application errors and controlled alert testing|
 |`Security`|Not collected initially|Avoid unnecessary volume and sensitive event collection|
 |`ForwardedEvents`|Not collected initially|Avoid duplicate ingestion of forwarded events on `MGMT01`|
-
-The equivalent custom XPath filters are:
-```
-System!*[System[(Level=1 or Level=2 or Level=3)]]
-Application!*[System[(Level=1 or Level=2 or Level=3)]]
-```
 
 ### Performance Counter Collection
 The DCR collects the following Windows performance counters at 60-second intervals
@@ -124,7 +118,7 @@ Get-Counter -Counter @(
 )
 ```
 
-<i>Screenshot</i>
+<img src="../Images/Data%20Collection%20Rule%20-%20Data%20Sources.png" width="1000"/>
 
 ## Azure Monitor Agent Deployment
 
@@ -133,8 +127,8 @@ Azure Monitor Agent was deployed through the DCR resource associations. The exte
 
 |Server|Azure Arc Status|AMA Extension|DCR Association|Data Reporting|
 |---|---|---|---|---|
-|`MGMT01`|Connected||||
-|`FS01`|Connected||||
+|`MGMT01`|`Connected`|`Succeeded`|`Associated`|`Reporting`|
+|`FS01`|`Connected`|`Succeeded`|`Associated`|`Reporting`|
 
 > The monitoring process and existing operational services were checked using PowerShell:
 
@@ -151,7 +145,7 @@ Get-Service LanmanServer
 Get-SmbShare | Select-Object Name, Path, Description
 ```
 
-<i>Monitor Agent Extension screenshot</i>
+<img src="../Images/AMA%20Extension.png" width="1000"/>
 
 ### Azure VM Monitoring
 `AZ-LAB01` was associated with the DCR only when it was running and able to reach the required Azure Monitor endpoints. Monitoring was checked through Azure VM extension status and workspace queries.
@@ -159,14 +153,14 @@ Get-SmbShare | Select-Object Name, Path, Description
 |Setting|Configuration|
 |---|---|
 |VM|`AZ-LAB01`|
-|Temporary Private IP||
+|Existing Private IP|`10.30.1.4`|
 |Monitoring Extension|`AzureMonitorWindowsAgent`|
-|Outbound Connectivity During Test||
+|Outbound Connectivity During Test|Temporary Public IP|
 |VM Managed Identity Requirement||
 |Telemetry Validation||
 |Post-Test VM State|Deallocated after lab session|
 
-> No permanent inbound RDP access was introduced. Deallocation or loss of the VM's outbound connectivity is an expected reason for missing monitoring data and will not be treated as an unexpected service outage.
+> No permanent inbound RDP access was introduced. Temporary Public IP address was deleted after validation testing.
 
 ## Log Analytics and KQL
 
