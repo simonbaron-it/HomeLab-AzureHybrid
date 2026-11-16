@@ -214,7 +214,7 @@ The Phase 1 £20 monthly budget and alert thresholds were retained. Monitoring c
 Phase 4 introduced centralised monitoring across the hybrid infrastructure using Azure Monitor and Log Analytics, providing operational visibility into both on-premises and Azure-hosted Windows Server systems.
 - **Centralised Monitoring:** Deployed a Log Analytics workspace in `Sweden Central` to consolidate monitoring data from the Azure Arc-enabled `MGMT01` and `FS01` servers and the Azure VM `AZ-LAB01`.
 - **Data Collection:** Configured Data Collection Rules and Azure Monitor Agent to collect selected Windows event logs, performance counters and agent heartbeats, with telemetry reporting validated.
-- **KQL and Diagnostics:** Used Kusto Query Language to analyse server heartbeats, Windows event logs, CPU utilisation, available memory and disk capacity. Confirms successful telemetry collection and centralised visibility across monitored systems.
+- **KQL and Diagnostics:** Used Kusto Query Language to analyse server heartbeats, Windows event logs, CPU utilisation, available memory and disk capacity, confirming successful telemetry collection and centralised visibility across monitored systems.
 - **Alerting:** Configured an Azure Monitor alert rule for application errors, with an Action Group providing email notifications. Validated alert triggering and notification delivery following a controlled test scenario.
 - **Security and Cost:** Restricted monitoring to selected infrastructure resources and event sources, retained outbound-only connectivity and reviewed monitoring expenditure against the existing £20 monthly budget.
 
