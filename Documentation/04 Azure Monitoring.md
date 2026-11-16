@@ -22,6 +22,7 @@ As the organisation extends its use of Azure, the infrastructure team requires a
 
 ## Scope
 Phase 4 introduces Azure Monitor and Log Analytics to the hybrid infrastructure established during Phases 1–3. The primary monitoring targets are `MGMT01` and `FS01`, which are already connected to Azure through Azure Arc. The Azure-hosted `AZ-LAB01` virtual machine will be included in a controlled monitoring test while powered on and provided with supported outbound connectivity.
+
 The existing Windows Admin Center, Windows Event Forwarding, Microsoft Entra Cloud Sync and file services remain in place. The implementation does not replace these services or collect the entire Windows Security or ForwardedEvents logs.
 
 > `AZ-LAB01` is normally deallocated outside lab sessions and does not retain a permanent public IP address. It will therefore not be included in continuous availability alerting. No site-to-site VPN or inbound management port forwarding is required for the on-premises monitoring targets.
@@ -45,7 +46,7 @@ The existing Windows Admin Center, Windows Event Forwarding, Microsoft Entra Clo
 |Alert Notification|`Email via Azure Monitor Action Group`|
 
 ## Monitoring Architecture
-Azure Monitor Agent collects selected operating-system events and performance data from the Azure Arc-enabled Windows servers and the Azure VM. A Data Collection Rule defines the collection scope and sends the data to a central Log Analytics workspace. KQL queries and Azure Monitor alert rules use the collected data for investigations and fault detection.
+Azure Monitor Agent collects selected operating-system events and performance data from the Azure Arc-enabled Windows servers and the Azure VM, then sends it to Azure Monitor for ingestion. A Data Collection Rule defines the collection scope and specifies the destination Log Analytics workspace. KQL queries and Azure Monitor alert rules use the collected data for investigations and fault detection.
 
 <img src="../Images/Phase%204%20Azure%20Monitoring%20Architecture.png" width="1000"/>
 
@@ -101,13 +102,13 @@ Selected System and Application events were collected to support investigation o
 |`ForwardedEvents`|Not collected initially|Avoid duplicate ingestion of forwarded events on `MGMT01`|
 
 ### Performance Counter Collection
-The DCR collects the following Windows performance counters at 60-second intervals
+The DCR collects the following Windows performance counters at 60-second intervals.
 
 |Counter|Interval|Purpose|
 |---|---|---|
 |`\Processor(_Total)\% Processor Time`|60 seconds|Total CPU utilisation|
 |`\Memory\Available MBytes`|60 seconds|Available system memory|
-|`\LogicalDisk(*)\% Free Space`|60 seconds|Available disk capacity by volume|
+|`\LogicalDisk(*)\% Free Space`|60 seconds|Percentage of free disk space by logical volume|
 
 ```powershell
 # Check that the selected performance counters exist locally.
@@ -130,7 +131,7 @@ Azure Monitor Agent was deployed through the DCR resource associations. The exte
 |`MGMT01`|`Connected`|`Succeeded`|`Associated`|`Reporting`|
 |`FS01`|`Connected`|`Succeeded`|`Associated`|`Reporting`|
 
-> The monitoring process and existing operational services were checked using PowerShell:
+> Azure Monitoring Agent process activity and existing Windows service stares were checked using PowerShell:
 
 ```powershell
 # Verify Azure Monitor Agent activity.
