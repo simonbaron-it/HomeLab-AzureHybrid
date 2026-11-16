@@ -154,20 +154,6 @@ Get-SmbShare | Select-Object Name, Path, Description
 
 > No permanent inbound RDP access was introduced. Temporary Public IP address was deleted after validation testing.
 
-## Log Analytics and KQL
-
-### Monitoring Data Validation
-KQL queries were run against `law-hybridlab-swc-01` to verify that monitored machines report heartbeat, Windows event and performance data.
-
-#### Heartbeat Monitoring
-<img src="../Images/KQL%20Query%201.png" width="1000"/>
-
-#### Windows Event Analysis
-<img src="../Images/KQL%20Query%202.png" width="1000"/>
-
-#### CPU, memory and disk Monitoring
-<img src="../Images/KQL%20Query%203.png" width="1000"/>
-
 ## Azure Monitor Alerting
 
 ### Action Group Configuration
@@ -182,8 +168,21 @@ An Azure Monitor Action Group was configured to send email notifications when a 
 
 <img src="../Images/Action%20Group.png" width="1000"/>
 
-### Application Event Alert
+## Validation and Testing
 
+### Monitoring Data Validation using KQL
+KQL queries were run against `law-hybridlab-swc-01` to verify that monitored machines report heartbeat, Windows event and performance data.
+
+#### Heartbeat Monitoring
+<img src="../Images/KQL%20Query%201.png" width="1000"/>
+
+#### Windows Event Analysis
+<img src="../Images/KQL%20Query%202.png" width="1000"/>
+
+#### CPU, memory and disk Monitoring
+<img src="../Images/KQL%20Query%203.png" width="1000"/>
+
+### Application Event Alert Validation via Action Group
 A controlled Application error was generated on `FS01` using an existing registered event source. The event was collected by AMA and used to validate an Azure Monitor log-search alert without interrupting production-style Windows services.
 
 <img src="../Images/FS01%20-%20Alert%20Rule.png" width="1000"/>
@@ -191,8 +190,6 @@ A controlled Application error was generated on `FS01` using an existing registe
 #### Alert email delivery validation
 
 <img src="../Images/Alert%20Email.png" width="1000"/>
-
-## Validation and Testing
 
 ## Security and Operational Considerations
 
