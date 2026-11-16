@@ -27,8 +27,8 @@ The project introduces Azure infrastructure and hybrid management while retainin
 |01 - Azure Foundation|Resource governance, networking, NSGs, VM deployment and secure administration|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
 |02 - Hybrid Identity|Entra Cloud Sync, pilot users/groups, password synchronisation and identity lifecycle testing|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
 |03 - Hybrid Management|Onboard `FS01` and `MGMT01` to Azure Arc|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
-|04 - Monitoring|Log Analytics, Data Collection Rules, KQL and alert testing|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
-|05 - Hybrid Storage|Azure Files, File Sync and synchronisation diagnostics|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|04 - Monitoring|Log Analytics, Data Collection Rules, KQL and alert testing|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
+|05 - Hybrid Storage|Azure Files, File Sync and synchronisation diagnostics|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
 |06 - Operations|Update Manager, Azure VM backup and file-level recovery|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
 |07 - Automation|Azure PowerShell, Bicep and hybrid health checks|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
 |08 - Validation|Simulated incidents, runbooks, final testing and documentation|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
@@ -41,16 +41,16 @@ The build will be documented as a series of practical engineering guides, listed
 |Azure Foundation|[Azure Foundation & Infrastructure Deployment](Documentation/01%20Azure%20Foundation.md)|
 |Hybrid Identity|[AD & Entra ID - Entra Cloud Sync](Documentation/02%20Hybrid%20Identity.md)|
 |Hybrid Management|[Azure Arc & Hybrid Server Management](Documentation/03%20Hybrid%20Management.md)|
-|Monitoring|![In Progress](https://img.shields.io/badge/Status-In%20Progress-yellow)|
-|File Services|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|Azure Monitoring|[Log Analytics Workspace, Data Collection Rules & Alerts](Documentation/04%20Azure%20Monitoring.md)|
+|File Services|![In Progress](https://img.shields.io/badge/Status-In%20Progress-yellow)|
 |Patching and Recovery|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Automation|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Testing|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 
 ## Technical Skills Being Developed
 - <b>Azure Infrastructure Administration:</b> Deploy, configure and secure Azure Virtual Machines, Virtual Networks, Network Security Groups, RBAC and cloud resources.
-- <b>Hybrid Identity & Server Management:</b>  Integrate on-premises Active Directory with Microsoft Entra ID using Cloud Sync, and manage Windows servers through Azure Arc.
-- <b>Monitoring & Troubleshooting:</b>  Implement Azure Monitor, Log Analytics, KQL queries and alerting to monitor infrastructure, investigate failures and resolve operational issues.
-- <b>Hybrid Storage, Backup & Recovery:</b>  Configure Azure Files and File Sync, manage server patching through Azure Update Manager, and validate backup and recovery procedures.
-- <b>PowerShell & Infrastructure as Code:</b>  Automate infrastructure administration, health checks and reporting using PowerShell, and deploy Azure resources using Bicep.
-- <b>Infrastructure Security & Governance:</b>  Apply least-privilege access, network security controls, resource governance and Azure cost management practices.
+- <b>Hybrid Identity & Server Management:</b> Integrate on-premises Active Directory with Microsoft Entra ID using Cloud Sync, and manage Windows servers through Azure Arc.
+- <b>Azure Monitoring:</b> Implement Azure Monitor, Log Analytics, KQL queries and alerting to monitor infrastructure.
+- <b>Hybrid Storage, Backup & Recovery:</b> Configure Azure Files and File Sync, manage server patching through Azure Update Manager, and validate backup and recovery procedures.
+- <b>PowerShell & Infrastructure as Code:</b> Automate infrastructure administration, health checks and reporting using PowerShell, and deploy Azure resources using Bicep.
+- <b>Infrastructure Security & Governance:</b> Apply least-privilege access, network security controls, resource governance and Azure cost management practices.
