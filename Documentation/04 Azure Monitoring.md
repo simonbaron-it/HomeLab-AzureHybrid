@@ -110,15 +110,6 @@ The DCR collects the following Windows performance counters at 60-second interva
 |`\Memory\Available MBytes`|60 seconds|Available system memory|
 |`\LogicalDisk(*)\% Free Space`|60 seconds|Percentage of free disk space by logical volume|
 
-```powershell
-# Check that the selected performance counters exist locally.
-Get-Counter -Counter @(
-    '\Processor(_Total)\% Processor Time',
-    '\Memory\Available MBytes',
-    '\LogicalDisk(*)\% Free Space'
-)
-```
-
 <img src="../Images/Data%20Collection%20Rule%20-%20Data%20Sources.png" width="1000"/>
 
 ## Azure Monitor Agent Deployment
@@ -131,7 +122,7 @@ Azure Monitor Agent was deployed through the DCR resource associations. The exte
 |`MGMT01`|`Connected`|`Succeeded`|`Associated`|`Reporting`|
 |`FS01`|`Connected`|`Succeeded`|`Associated`|`Reporting`|
 
-> Azure Monitoring Agent process activity and existing Windows service stares were checked using PowerShell:
+> Azure Monitor Agent process activity and existing Windows service states were checked using PowerShell:
 
 ```powershell
 # Verify Azure Monitor Agent activity.
@@ -149,7 +140,7 @@ Get-SmbShare | Select-Object Name, Path, Description
 <img src="../Images/AMA%20Extension.png" width="1000"/>
 
 ### Azure VM Monitoring
-`AZ-LAB01` was associated with the DCR only when it was running and able to reach the required Azure Monitor endpoints. Monitoring was checked through Azure VM extension status and workspace queries.
+`AZ-LAB01` was associated with the Data Collection Rule and configured with the Azure Monitor Agent. Telemetry collection was validated while the VM was running and had outbound connectivity to the required Azure Monitor endpoints. Monitoring functionality was verified through the Azure VM extension status and Log Analytics workspace queries.
 
 |Setting|Configuration|
 |---|---|
@@ -157,8 +148,8 @@ Get-SmbShare | Select-Object Name, Path, Description
 |Existing Private IP|`10.30.1.4`|
 |Monitoring Extension|`AzureMonitorWindowsAgent`|
 |Outbound Connectivity During Test|Temporary Public IP|
-|VM Managed Identity Requirement||
-|Telemetry Validation||
+|VM Managed Identity Requirement|System-assigned managed identity|
+|Telemetry Validation|AMA heartbeat and monitoring data received in Log Analytics|
 |Post-Test VM State|Deallocated after lab session|
 
 > No permanent inbound RDP access was introduced. Temporary Public IP address was deleted after validation testing.
@@ -166,34 +157,70 @@ Get-SmbShare | Select-Object Name, Path, Description
 ## Log Analytics and KQL
 
 ### Monitoring Data Validation
-### Heartbeat Monitoring
-### Windows Event Analysis
-### CPU Performance Monitoring
-### Memory and Disk Monitoring
-### Monitoring Data Volume
+KQL queries were run against `law-hybridlab-swc-01` to verify that monitored machines report heartbeat, Windows event and performance data.
+
+#### Heartbeat Monitoring
+<img src="../Images/KQL%20Query%201.png" width="1000"/>
+
+#### Windows Event Analysis
+<img src="../Images/KQL%20Query%202.png" width="1000"/>
+
+#### CPU, memory and disk Monitoring
+<img src="../Images/KQL%20Query%203.png" width="1000"/>
 
 ## Azure Monitor Alerting
 
 ### Action Group Configuration
-### Application Event Alert
-### Missing Heartbeat Alert
+An Azure Monitor Action Group was configured to send email notifications when a monitoring rule detects a defined condition.
 
-## Controlled Monitoring Test?
+|Setting|Configuration|
+|---|---|
+|Action Group|`ag-hybridlab-email-01`|
+|Resource Group|`rg-hybridlab-swc-01`|
+|Notification Method|Email|
+|Recipient|Lab administrator email address|
+
+<img src="../Images/Action%20Group.png" width="1000"/>
+
+### Application Event Alert
+
+A controlled Application error was generated on `FS01` using an existing registered event source. The event was collected by AMA and used to validate an Azure Monitor log-search alert without interrupting production-style Windows services.
+
+<img src="../Images/FS01%20-%20Alert%20Rule.png" width="1000"/>
+
+#### Alert email delivery validation
+
+<img src="../Images/Alert%20Email.png" width="1000"/>
 
 ## Validation and Testing
 
 ## Security and Operational Considerations
 
 ### Monitoring Security
+The monitoring solution is intended to provide operational visibility without changing the existing on-premises Windows security model.
+
+Key considerations:
+- Maintained outbound-only connectivity from on-premises servers to Azure services; no inbound port forwarding was required.
+- Applied least-privilege Azure RBAC to monitoring resources, workspace queries, DCR management and extension deployment.
+- Restricted Windows event collection to operationally useful data rather than broadly ingesting security or forwarded logs.
+- Avoided unnecessary duplicate event collection from `MGMT01`, which already provides Windows Event Forwarding.
+- Monitored the additional workload on `MGMT01`, which also hosts Windows Admin Center and the privileged Microsoft Entra Cloud Sync agent.
+
 ### Cost Management
+The Phase 1 £20 monthly budget and alert thresholds were retained. Monitoring costs were reviewed using Log Analytics usage information and Azure Cost Management.
+- Used limited System/Application event severities and selected performance counters.
+- Avoided broad Security and ForwardedEvents collection.
+- Checked the cost of log-search alert rules and any notifications.
+- Deallocated `AZ-LAB01` outside planned monitoring tests.
+- Removed temporary test alerts when no longer required.
 
 ## Phase 4 Summary
-- **Centralised Monitoring:** 
-- **Data Collection:** 
-- **KQL and Diagnostics:** 
-- **Alerting:** 
-- **Troubleshooting:** 
-- **Security and Cost:**
+Phase 4 introduced centralised monitoring across the hybrid infrastructure using Azure Monitor and Log Analytics, providing operational visibility into both on-premises and Azure-hosted Windows Server systems.
+- **Centralised Monitoring:** Deployed a Log Analytics workspace in `Sweden Central` to consolidate monitoring data from the Azure Arc-enabled `MGMT01` and `FS01` servers and the Azure VM `AZ-LAB01`.
+- **Data Collection:** Configured Data Collection Rules and Azure Monitor Agent to collect selected Windows event logs, performance counters and agent heartbeats, with telemetry reporting validated.
+- **KQL and Diagnostics:** Used Kusto Query Language to analyse server heartbeats, Windows event logs, CPU utilisation, available memory and disk capacity; confirming successful telemetry collection and centralised visibility across monitored systems.
+- **Alerting:** Configured Azure Monitor alert rules for application errors, with an Action Group providing email notifications. Validated alert triggering and notification delivery following a controlled test scenario.
+- **Security and Cost:** Restricted monitoring to selected infrastructure resources and event sources, retained outbound-only connectivity and reviewed monitoring expenditure against the existing £20 monthly budget.
 
 ## Next Steps
 **Phase 5:** Hybrid Storage will focus on extending selected `FS01` file services into Azure using Azure Files and Azure File Sync.
