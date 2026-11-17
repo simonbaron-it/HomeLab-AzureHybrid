@@ -61,5 +61,58 @@ The existing Windows Server remains responsible for local file access and permis
 
 ## Azure Storage Configuration
 
+### Storage Account Deployment
+An Azure Storage Account is used to host the Azure Files SMB share for the synchronisation pilot. The deployment uses the existing Azure resource group and Sweden Central region.
+
+|Setting|Configuration|
+|---|---|
+|Storage Account||
+|Resource Group|`rg-hybridlab-swc-01`|
+|Region|`Sweden Central`|
+|Primary Service|`Azure Files`|
+|Performance|`Standard/HDD`|
+|Billing Model|`Pay-as-you-go`|
+|Redundancy||
+|Secure Transfer||
+|Minimum TLS Version||
+|Storage Account Key Access||
+|Public Network Access||
+|Resource Tags|Existing Phase 1 tagging convention|
+
+<i>Storage Account Screenshot</i>
+
+### Azure Files Share
+An Azure Files SMB share is created within the storage account as the cloud endpoint for File Sync.
+
+|Setting|Configuration|
+|---|---|
+|File Share||
+|Protocol|`SMB`|
+|Storage Account||
+|Access Tier||
+|Quota/Provisioned Capacity||
+|File Share Soft Delete||
+|Initial Share Contents|Empty, before File Sync configuration|
+
+<i>Azure File Share Screenshot</i>
+
+## Azure File Sync Configuration
+
+### Storage Sync Service Deployment
+A Storage Sync Service is deployed to manage registered Windows servers and the synchronisation relationships between local server endpoints and Azure file shares.
+
+|Setting|Configuration|
+|---|---|
+|Storage Sync Service||
+|Resource Group|`rg-hybridlab-swc-01`|
+|Region|`Sweden Central`|
+|Resource Tags|Existing Phase 1 tagging convention|
+|Registered Servers|`FS01`|
+
+<i>Storage Sync Service Screenshot</i>
+
+### FS01 Preparation
+Before installing the File Sync agent, the existing file server configuration and available storage are checked. A dedicated NTFS folder is prepared with synthetic test data, separate from `E:\CompanyData`.
+
 
 
