@@ -40,22 +40,21 @@ The implementation reuses the existing Azure subscription, resource group, resou
 |Server Network|`10.10.10.0/24`|
 |Azure Region|`Sweden Central`|
 |Resource Group|`rg-hybridlab-swc-01`|
-|Storage Account||
-|Azure Files Share||
-|Storage Sync Service||
-|Sync Group||
-|Cloud Endpoint||
+|Storage Account|`sthybridfileswc01`|
+|Azure Files Share|`fs01-labdata`|
+|Storage Sync Service|`stsync-hybridlab-swc-01`|
+|Sync Group|`sg-fs01-test-01`|
+|Cloud Endpoint|`fs01-labdata`|
 |Server Endpoint|`FS01` — `E:\AzureSync-Test`|
 |Cloud Tiering|`Disabled`|
 |Existing Hybrid Management|Azure Arc-enabled Servers|
-|Existing Monitoring Workspace|`law-hybridlab-swc-01`|
 
 ### Hybrid Storage Architecture
 The design uses the Azure File Sync agent on `FS01` to synchronise a dedicated NTFS test folder with an Azure Files SMB share. The Storage Sync Service manages the synchronisation relationship through a sync group containing the cloud endpoint and the registered `FS01` server endpoint.
 
 The existing Windows Server remains responsible for local file access and permissions. Azure Files provides the cloud-side copy of the synchronised test data. The File Sync agent communicates with Azure over outbound HTTPS through the existing on-premises routing and Hyper-V NAT configuration.
 
-<i>Insert Architecture Diagram</i>
+<img src="../Images/Phase%205%20Hybrid%20Storage%20-%20Architecture%20Diagram.png" width="1000"/>
 
 > **Deployment Decision:** A dedicated folder on `FS01` was selected for the File Sync pilot rather than the existing `CompanyData` folder. This isolates synchronisation and troubleshooting tests from departmental file shares and their AGDLP-based NTFS permissions.
 
@@ -66,35 +65,35 @@ An Azure Storage Account is used to host the Azure Files SMB share for the synch
 
 |Setting|Configuration|
 |---|---|
-|Storage Account||
+|Storage Account|`sthybridfileswc01`|
+|Account Type|`StorageV2`|
 |Resource Group|`rg-hybridlab-swc-01`|
 |Region|`Sweden Central`|
 |Primary Service|`Azure Files`|
 |Performance|`Standard/HDD`|
 |Billing Model|`Pay-as-you-go`|
-|Redundancy||
-|Secure Transfer||
-|Minimum TLS Version||
-|Storage Account Key Access||
-|Public Network Access||
+|Redundancy|`Locally Redundant Storage (LRS)`|
+|Secure Transfer|`Enabled`|
+|Minimum TLS Version|`Version 1.2`|
+|Storage Account Key Access|`Enabled`|
+|Public Network Access|`Enabled`|
 |Resource Tags|Existing Phase 1 tagging convention|
 
-<i>Storage Account Screenshot</i>
+<img src="../Images/Storage%20Account.png" width="1000"/>
 
 ### Azure Files Share
 An Azure Files SMB share is created within the storage account as the cloud endpoint for File Sync.
 
 |Setting|Configuration|
 |---|---|
-|File Share||
+|File Share|`fs01-labdata`|
 |Protocol|`SMB`|
-|Storage Account||
-|Access Tier||
-|Quota/Provisioned Capacity||
-|File Share Soft Delete||
+|Storage Account|`sthybridfileswc01`|
+|Access Tier|`Hot`|
+|File Share Soft Delete|`Enabled`|
 |Initial Share Contents|Empty, before File Sync configuration|
 
-<i>Azure File Share Screenshot</i>
+<img src="../Images/Azure%20File%20Share.png" width="1000"/>
 
 ## Azure File Sync Configuration
 
@@ -103,16 +102,16 @@ A Storage Sync Service is deployed to manage registered Windows servers and the 
 
 |Setting|Configuration|
 |---|---|
-|Storage Sync Service||
+|Storage Sync Service|`stsync-hybridlab-swc-01`|
 |Resource Group|`rg-hybridlab-swc-01`|
 |Region|`Sweden Central`|
 |Resource Tags|Existing Phase 1 tagging convention|
 |Registered Servers|`FS01`|
 
-<i>Storage Sync Service Screenshot</i>
+<img src="../Images/Storage%20Sync%20Service.png" width="1000"/>
 
 ### FS01 Preparation
-Before installing the File Sync agent, the existing file server configuration and available storage are checked. A dedicated NTFS folder is prepared with synthetic test data, separate from `E:\CompanyData`.
+Before installing the File Sync agent, the existing file server configuration and available storage are checked.
 
 ```powershell
 # Verify file server services and shares.
@@ -127,33 +126,21 @@ Get-Volume -DriveLetter E |
 Resolve-DnsName management.azure.com
 Test-NetConnection management.azure.com -Port 443
 
-# Create an isolated test dataset, if it does not exist.
-New-Item -Path 'E:\AzureSync-Test\IT' -ItemType Directory -Force
-New-Item -Path 'E:\AzureSync-Test\Documents' -ItemType Directory -Force
-
-'Initial file created on FS01' |
-    Set-Content 'E:\AzureSync-Test\FS01-Origin.txt'
-'IT department test data' |
-    Set-Content 'E:\AzureSync-Test\IT\IT-Test.txt'
-'Document synchronisation test' |
-    Set-Content 'E:\AzureSync-Test\Documents\Document-Test.txt'
-
-# Record the test directory and NTFS permissions.
-Get-ChildItem 'E:\AzureSync-Test' -Recurse
-icacls 'E:\AzureSync-Test'
+# Verify Azure Arc connection
+& 'C:\Program Files\AzureConnectedMachineAgent\azcmagent.exe' show
 ```
 
 |Validation|Result|
 |---|---|
-|`LanmanServer` Status||
-|Existing SMB Shares||
-|E: NTFS Volume and Free Space||
-|External DNS / HTTPS Connectivity||
-|Test Directory and Files||
-|NTFS Permissions Baseline||
-|Backup / Recovery Point Available||
+|`LanmanServer` Status|`Running`|
+|Existing SMB Shares|`Verified`|
+|E: NTFS Volume Free Space|`20964868096`|
+|External DNS / HTTPS Connectivity|`Successful`|
+|Azure Arc Connection|`Running`|
 
-<i>File Sync Test Folder Screenshot</i>
+A dedicated NTFS folder is prepared on `FS01` with synthetic test data, separate from `E:\CompanyData`.
+
+<img src="../Images/Azure%20Sync%20test%20Directory%20FS01.png" width="1000"/>
 
 ### Agent Installation and Server Registration
 The Azure File Sync agent is installed on the existing `FS01` Windows Server 2025 VM.
@@ -162,30 +149,28 @@ The Azure File Sync agent is installed on the existing `FS01` Windows Server 202
 |---|---|
 |Server|`FS01`|
 |Operating System|Windows Server 2025|
-|Installation Method||
-|File Sync Agent Version||
-|Agent Service||
-|Storage Sync Service||
-|Registration Status||
+|Installation Method|`.msi`|
+|File Sync Agent Version|`23.2`|
+|Storage Sync Service|`stsync-hybridlab-swc-01`|
 
-> The File Sync server registration process associates FS01 with the existing Azure subscription, resource group and Storage Sync Service. The Azure portal's Registered servers view is used to verify the connection status and agent version.
+> The File Sync server registration process associates `FS01` with the existing Azure subscription, resource group and Storage Sync Service. The Azure portal's Registered servers view is used to verify the connection status and agent version.
 
-<i>Sync Agent/Registered Servers Screenshots</i>
+<img src="../Images/Azure%20File%20Sync%20-%20Registered%20Servers.png" width="1000"/>
 
 ### Sync Group and Cloud Endpoint
 A sync group is created to link the Azure Files share to the registered on-premises server.
 
 |Setting|Configuration|
 |---|---|
-|Sync Group||
-|Storage Sync Service||
-|Storage Account||
-|Cloud Endpoint||
-|Provisioning Status||
+|Sync Group|`sg-fs01-test-01`|
+|Storage Sync Service|`stsync-hybridlab-swc-01`|
+|Storage Account|`sthybridfileswc01`|
+|Cloud Endpoint|`fs01-labdata`|
+|Provisioning Status|`Provisioned`|
 
 > The cloud endpoint identifies the Azure file share. Only the intended test share is associated with this sync group.
 
-<i>Screenshots?</i>
+<img src="../Images/Azure%20File%20Sync%20Endpoints.png" width="1000"/>
 
 ### FS01 Server Endpoint
 A server endpoint is added to the sync group, targeting the dedicated on-premises test folder.
@@ -195,30 +180,41 @@ A server endpoint is added to the sync group, targeting the dedicated on-premise
 |Registered Server|`FS01`|
 |Local Path|`E:\AzureSync-Test`|
 |Cloud Tiering|`Disabled`|
-|Initial Synchronisation Mode||
-|Endpoint Health||
-|Persistent Sync Errors||
+|Initial Synchronisation Mode|`Merge`|
+|Endpoint Health|`Healthy`|
+|Persistent Sync Errors|`0`|
 
-> The server endpoint does not target `E:\CompanyData`. With cloud tiering disabled, synchronised test files remain available locally on FS01 rather than being intentionally tiered into cloud-backed placeholders.
+> The server endpoint does not target `E:\CompanyData`. With cloud tiering disabled, synchronised test files remain available locally on `FS01` rather than being intentionally tiered into cloud-backed placeholders.
 
-<i>Screenshots?</i>
+<img src="../Images/Azure%20File%20Sync%20-%20Server%20Endpoint.png" width="1000"/>
 
 ## Validation and Testing
 
 ### File Synchronisation Validation
 The following tests are designed to verify that changes made on FS01 are reflected in Azure Files and that changes made directly in the Azure file share are eventually downloaded to the server.
 
-|Test|Action|Result|
-|---|---|---|
-|Initial Upload|Synchronise the prepared `FS01-Origin.txt`, `IT` and `Documents` data||
-|Folder/File Creation|Create a new folder and file on FS01||
-|File Modification|Append text to `New-File.txt` and inspect the cloud copy||
-|Cloud-to-Server|Upload `Azure-Origin.txt` to Azure Files and detect/download the change||
-|Deletion|Create, sync and delete `Delete-Me.txt`; verify propagation||
-|NTFS Permissions|Compare relevant test-folder ACLs before and after synchronisation||
-|Existing File Services|Verify `LanmanServer`, original SMB shares and `E:\CompanyData`||
+#### Initial Upload
+The `FS01-Origin.txt`, `IT` and `Documents` data prepared on `FS01` successfully replicated to the Azure File Share.
 
-<i>Validation Screenshots</i>
+<img src="../Images/File%20Sync%20Validation.png" width="1000"/>
+
+#### Folder/File Creation
+A `New-File.txt` file and `New-Department` folder created on `FS01` successfully replicated to the Azure File Share.
+
+<img src="../Images/File%20Sync%20Validation%20-%20New%20Folder.png" width="1000"/>
+
+#### File Modification
+`New-File.txt` was renamed to `Renamed-File.txt` on `FS01` and the change was verified in the Azure File Share.
+
+<img src="../Images/File%20Sync%20Validation%20-%20Renamed%20File.png" width="1000"/>
+
+#### Cloud-to-Server Replication
+An `Azure-Origin.txt` file was uploaded directly to the Azure File Share and successfully replicated to `FS01`.
+
+<img src="../Images/File%20Sync%20Validation%20-%20New%20Azure%20File.png" width="1000"/>
+
+#### File Deletion
+A `Delete-Me.txt` file was deleted from `FS01` and the deletion was successfully replicated in the Azure File Share.
 
 ## Security and Operational Considerations
 
@@ -235,25 +231,26 @@ Key considerations:
 - Treat file synchronisation as separate from versioned backup and recovery.
 
 ### Cost Management
-The Phase 1 £20 monthly budget and alert thresholds at £10, £16 and £20 remain in place. Azure Files and associated services can generate charges even while the Azure VM `AZ-LAB01` is deallocated.
+The Phase 1 £20 monthly budget and alert thresholds at £10, £16 and £20 remained in place.
 
 |Cost Area|Decision/Observation|
 |---|---|
-|Storage Billing Model||
-|Redundancy and Capacity||
-|File Transactions/Data Transfer||
-|Storage Sync Service/Registered Servers||
-|Snapshots/Retention||
-|Actual Phase 5 Cost||
+|Storage Billing Model|`Pay-As-You-Go`|
+|Redundancy|`Locally Redundant Storage (LRS)`|
+|Storage Sync Service/Registered Servers|`FS01`|
+|Actual Phase 5 Cost|`£5.06`|
 |Budget Alerts|Existing £20 monthly budget|
 
+<img src="../Images/Phase%205%20Total%20Costs.png" width="1000"/>
+
 ## Phase 5 Summary
-- Azure Storage:
-- Azure File Sync:
-- Synchronisation Validation:
-- Monitoring and Troubleshooting:
-- Existing Services:
-- Security and Cost:
+Phase 5 extended the existing on-premises file server infrastructure into Microsoft Azure using Azure Files and Azure File Sync.
+
+- Azure Storage: Deployed an Azure Storage Account and Azure Files share in Sweden Central to provide cloud-based storage for synchronised test data.
+- Azure File Sync: Installed and registered the Azure File Sync agent on `FS01`, configuring a Storage Sync Service, sync group and server endpoint targeting `E:\AzureSync-Test`, with cloud tiering disabled.
+- Synchronisation Validation: Validated bidirectional file synchronisation, including initial uploads, file creation, modification, deletion propagation and cloud-to-server change detection.
+- Existing Services: Preserved the existing departmental SMB shares, NTFS permissions and file services by restricting synchronisation to a dedicated test directory.
+- Security and Cost: Maintained outbound HTTPS connectivity without exposing inbound SMB ports, reviewed Azure storage and synchronisation costs, and retained the existing £20 monthly budget and cost alerts.
 
 ## Next Steps
 **Phase 6: Patching, Backup and Recovery** will focus on operational maintenance of the Azure Windows Server environment and on validating backup and recovery procedures.
