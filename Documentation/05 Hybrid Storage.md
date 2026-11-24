@@ -17,8 +17,6 @@ As the organisation expands its use of Microsoft Azure, the infrastructure team 
 - Configure a server endpoint for a dedicated NTFS test folder, with cloud tiering disabled.
 - Validate file creation, modification, folder structure and deletion synchronisation from on-premises to Azure.
 - Validate cloud-to-server synchronisation, including manual cloud change detection where required.
-- Review synchronisation health, Windows event logs and service connectivity.
-- Perform a controlled File Sync failure-and-recovery test.
 - Verify that existing SMB shares, NTFS permissions and Azure monitoring remain operational.
 - Review storage security, data protection limitations and Azure costs.
 
@@ -134,9 +132,9 @@ Test-NetConnection management.azure.com -Port 443
 |---|---|
 |`LanmanServer` Status|`Running`|
 |Existing SMB Shares|`Verified`|
-|E: NTFS Volume Free Space|`20964868096`|
+|E: NTFS Volume Free Space|`20964868096 bytes`|
 |External DNS / HTTPS Connectivity|`Successful`|
-|Azure Arc Connection|`Running`|
+|Azure Arc Connection|`Connected`|
 
 A dedicated NTFS folder is prepared on `FS01` with synthetic test data, separate from `E:\CompanyData`.
 
