@@ -207,7 +207,7 @@ A `New-File.txt` file and `New-Department` folder created on `FS01` successfully
 <img src="../Images/File%20Sync%20Validation%20-%20Renamed%20File.png" width="1000"/>
 
 #### Cloud-to-Server Replication
-An `Azure-Origin.txt` file was uploaded directly to the Azure File Share and successfully replicated to `FS01`.
+An `Azure-Origin.txt` file was uploaded directly to the Azure File Share and successfully replicated to `FS01` by manually triggering change detection.
 
 <img src="../Images/File%20Sync%20Validation%20-%20New%20Azure%20File.png" width="1000"/>
 
