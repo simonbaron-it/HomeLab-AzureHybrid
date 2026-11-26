@@ -148,4 +148,139 @@ A backup policy was configured for `AZ-LAB01`. The VM uses Trusted Launch, so th
 ### Baseline Backup and Recovery Point
 Azure VM backup was enabled for `AZ-LAB01`. An on-demand backup was initiated before the patching exercise to preserve the original recovery-test files and the pre-maintenance server state.
 
+|Validation|Result|
+|---|---|
+|Protection Status||
+|First Backup Job||
+|Baseline Recovery Point||
+|Recovery Point Consistency||
+|OS and Data Disks||
+|Backup Job Details||
 
+<i>Screenshot</i>
+
+## Azure Update Manager
+
+### Connectivity and Update Assessment
+`AZ-LAB01` was assessed using Azure Update Manager after the baseline recovery point was confirmed. The VM was running, and its connectivity to the configured Windows Update source was checked.
+
+A temporary public IP was configured to support outbound connectivity, before being removed at the end of phase 6 to avoid incurring further charges. No public inbound RDP rule was configured, and administration remained through Azure Bastion Developer.
+
+```powershell
+# Windows Update client services.
+Get-Service wuauserv, bits |
+    Select-Object Name, Status, StartType
+
+# Update-service DNS resolution.
+Resolve-DnsName download.windowsupdate.com
+```
+
+|Assessment Attribute|Result|
+|---|---|
+|Assessment Date||
+|Assessment Status||
+|Critical Updates Missing||
+|Security Updates Missing||
+|Other Applicable Updates||
+|Pending Reboot||
+|Periodic Assessment||
+
+<i>Screenshot</i>
+
+### Update Deployment
+A controlled, one-time update deployment was performed using Azure Update Manager. The maintenance scope was restricted to `AZ-LAB01`. the on-premises Azure Arc-enabled servers were not included.
+
+|Setting|Configuration|
+|---|---|
+|Target Machine|`AZ-LAB01`|
+|Deployment Method||
+|Update Classifications||
+|Maintenance Window||
+|Reboot Setting||
+|Installation Result||
+|Installed KBs||
+
+<i>Screenshot</i>
+
+## Post-Maintenance Validation
+Following maintenance, the VM's operating system, storage and Azure VM Agent were checked. Windows Update events and Azure Update Manager deployment history were reviewed to confirm the outcome.
+
+```powershell
+Get-HotFix |
+    Sort-Object InstalledOn -Descending |
+    Select-Object -First 15
+
+Get-CimInstance Win32_OperatingSystem |
+    Select-Object CSName, LastBootUpTime
+
+Get-Volume |
+    Select-Object DriveLetter, FileSystem, HealthStatus, SizeRemaining
+
+Get-WinEvent -FilterHashtable @{
+    LogName = 'Microsoft-Windows-WindowsUpdateClient/Operational'
+    StartTime = (Get-Date).AddDays(-2)
+} -MaxEvents 30 |
+    Select-Object TimeCreated, Id, LevelDisplayName, Message
+```
+
+|Validation|Result|
+|---|---|
+|Update Deployment||
+|VM Power/Access||
+|Windows Build and KB History||
+|OS / Data Disk Health||
+|Relevant Windows Event Errors||
+|Temporary Public IP||
+
+## Post-Maintenance Backup
+After patching and server health validation, the recovery test data was modified and a second backup was created to record the new state.
+
+```powershell
+'Updated configuration: Version 2' |
+    Set-Content 'E:\Recovery-Test\Config-Test.txt'
+
+'Created after patch installation' |
+    Set-Content 'E:\Recovery-Test\Post-Maintenance.txt'
+```
+
+|Recovery Point|Expected Test File State|Actual Timestamp / Verification|
+|---|---|---|
+|Baseline|`Config-Test.txt` Version 1; `Delete-Me.txt` present||
+|Post-maintenance|`Config-Test.txt` Version 2; `Post-Maintenance.txt` present||
+
+## File-Level Recovery Validation
+### Simulated Data Loss
+### Recovery Point Mount and File Retrieval
+### Recovered File Integrity
+
+## Validation and Testing
+
+## Security and Operational Considerations
+
+### Patching and Backup Security
+The implementation was designed to support operational maintenance and recovery without exposing additional public management services or disrupting the existing hybrid infrastructure.
+
+Key considerations include:
+- Restricting Azure Update Manager deployment to the Azure test VM rather than automatically patching `MGMT01`, `FS01` or the domain controllers.
+- Retaining Azure Bastion Developer for VM administration without creating a public inbound RDP rule.
+- Removing any temporary public IP after maintenance or recovery operations.
+- Using a dedicated test directory on the Azure managed data disk rather than modifying production-style file services.
+- Reviewing vault soft-delete, retention and immutability settings before enabling protection or cleanup.
+- Unmounting temporary recovery volumes at the end of the test.
+- Distinguishing Azure VM Backup from Azure File Sync and the separate backup requirements for `FS01` or Azure Files.
+
+### Cost Management
+The Phase 1 monthly budget of £20, with alerts at 50%, 80% and 100%, remained the reference point for the Phase 6 deployment. Additional costs were reviewed for protected VM backup, recovery-point storage, snapshot retention, and any additional VM runtime during patching and recovery testing.
+
+## Phase 6 Summary
+Phase 6...
+- Windows Server Maintenance:
+- Azure Backup:
+- Recovery Point Validation:
+- File-Level Recovery:
+- Security and Cost:
+
+## Next Steps
+**Phase 7: Automation** will focus on Azure PowerShell, Bicep and hybrid infrastructure health checks to automate common administrative operations and support repeatable cloud deployments.
+
+The patching and backup processes established in Phase 6 will provide opportunities to evaluate future automation of VM maintenance reporting, backup health checks and recovery-point inventory.
