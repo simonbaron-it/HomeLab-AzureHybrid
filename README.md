@@ -28,8 +28,8 @@ The project introduces Azure infrastructure and hybrid management while retainin
 |02 - Hybrid Identity|Entra Cloud Sync, pilot users/groups, password synchronisation and identity lifecycle testing|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
 |03 - Hybrid Management|Onboard `FS01` and `MGMT01` to Azure Arc|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
 |04 - Monitoring|Log Analytics, Data Collection Rules, KQL and alert testing|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
-|05 - Hybrid Storage|Azure Files, File Sync and synchronisation diagnostics|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
-|06 - Operations|Update Manager, Azure VM backup and file-level recovery|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
+|05 - Hybrid Storage|Azure Files, File Sync and synchronisation diagnostics|![Complete](https://img.shields.io/badge/-Complete-brightgreen)|
+|06 - Operations|Update Manager, Azure VM backup and file-level recovery|![In Progress](https://img.shields.io/badge/-In%20Progress-yellow)|
 |07 - Automation|Azure PowerShell, Bicep and hybrid health checks|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
 |08 - Validation|Simulated incidents, runbooks, final testing and documentation|![Planned](https://img.shields.io/badge/-Planned-lightgrey)|
 
@@ -42,8 +42,8 @@ The build will be documented as a series of practical engineering guides, listed
 |Hybrid Identity|[AD & Entra ID - Entra Cloud Sync](Documentation/02%20Hybrid%20Identity.md)|
 |Hybrid Management|[Azure Arc & Hybrid Server Management](Documentation/03%20Hybrid%20Management.md)|
 |Azure Monitoring|[Log Analytics Workspace, Data Collection Rules & Alerts](Documentation/04%20Azure%20Monitoring.md)|
-|File Services|![In Progress](https://img.shields.io/badge/Status-In%20Progress-yellow)|
-|Patching and Recovery|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
+|File Services|[Azure Files Share, Azure File Sync Agent & Storage Sync Service](Documentation/05%20Hybrid%20Storage.md)|
+|Patching and Recovery|![In Progress](https://img.shields.io/badge/Status-In%20Progress-yellow)|
 |Automation|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 |Testing|![Planned](https://img.shields.io/badge/Status-Planned-lightgrey)|
 
