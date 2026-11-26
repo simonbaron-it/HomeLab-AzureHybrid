@@ -109,7 +109,7 @@ A Storage Sync Service is deployed to manage registered Windows servers and the 
 <img src="../Images/Storage%20Sync%20Service.png" width="1000"/>
 
 ### FS01 Preparation
-Before installing the File Sync agent, the existing file server configuration and available storage are checked.
+Before installing the File Sync agent, the existing file server configuration and available storage were checked.
 
 ```powershell
 # Verify file server services and shares.
@@ -189,7 +189,7 @@ A server endpoint is added to the sync group, targeting the dedicated on-premise
 ## Validation and Testing
 
 ### File Synchronisation Validation
-The following tests are designed to verify that changes made on FS01 are reflected in Azure Files and that changes made directly in the Azure file share are eventually downloaded to the server.
+The following tests verify that changes made on FS01 are reflected in Azure Files and that changes made directly in the Azure file share are eventually downloaded to the server.
 
 #### Initial Upload
 The `FS01-Origin.txt`, `IT` and `Documents` data prepared on `FS01` successfully replicated to the Azure File Share.
