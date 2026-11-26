@@ -236,10 +236,7 @@ The Phase 1 £20 monthly budget and alert thresholds at £10, £16 and £20 rema
 |Storage Billing Model|`Pay-As-You-Go`|
 |Redundancy|`Locally Redundant Storage (LRS)`|
 |Storage Sync Service/Registered Servers|`FS01`|
-|Actual Phase 5 Cost|`£5.06`|
 |Budget Alerts|Existing £20 monthly budget|
-
-<img src="../Images/Phase%205%20Total%20Costs.png" width="1000"/>
 
 ## Phase 5 Summary
 Phase 5 extended the existing on-premises file server infrastructure into Microsoft Azure using Azure Files and Azure File Sync.
