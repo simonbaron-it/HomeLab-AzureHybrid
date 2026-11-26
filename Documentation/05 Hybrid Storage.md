@@ -1,7 +1,7 @@
 # Hybrid Storage
 > This documentation covers the integration of the existing on-premises Windows Server file services with Microsoft Azure using Azure Files and Azure File Sync.
 >
-> The implementation focuses on Azure file share deployment, File Sync agent configuration, bidirectional synchronisation, operational validation, troubleshooting and cost management.
+> The implementation focuses on Azure file share deployment, File Sync agent configuration, bidirectional synchronisation, operational validation and cost management.
 
 ## Scenario and Objectives
 
@@ -54,7 +54,7 @@ The existing Windows Server remains responsible for local file access and permis
 
 <img src="../Images/Phase%205%20Hybrid%20Storage%20-%20Architecture%20Diagram.png" width="1000"/>
 
-> **Deployment Decision:** A dedicated folder on `FS01` was selected for the File Sync pilot rather than the existing `CompanyData` folder. This isolates synchronisation and troubleshooting tests from departmental file shares and their AGDLP-based NTFS permissions.
+> **Deployment Decision:** A dedicated folder on `FS01` was selected for the File Sync pilot rather than the existing `CompanyData` folder. This isolates synchronisation from departmental file shares and their AGDLP-based NTFS permissions.
 
 ## Azure Storage Configuration
 
